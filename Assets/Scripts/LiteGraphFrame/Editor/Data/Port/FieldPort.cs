@@ -48,7 +48,7 @@ namespace LiteGraphFrame
             var jsonData = base.Encoder();
             jsonData["FieldName"] = FieldName;
             jsonData["TypeName"] = TypeName;
-            jsonData["FieldValue"] = LiteGraphParseEditorUtil.ToString(TypeName, FieldValue);
+            jsonData["FieldValue"] = ValuePraseUtil.ToString(TypeName, FieldValue);
             jsonData["FieldDescription"] = FieldDescription;
             return jsonData;
         }
@@ -58,7 +58,7 @@ namespace LiteGraphFrame
             base.Decoder(jsonData);
             FieldName = (string)jsonData["FieldName"];
             TypeName = (string)jsonData["TypeName"];
-            FieldValue = LiteGraphParseEditorUtil.ToObject(TypeName, (string)jsonData["FieldValue"]);
+            FieldValue = ValuePraseUtil.ToObject(TypeName, (string)jsonData["FieldValue"]);
             FieldDescription = (string)jsonData["FieldDescription"];
         }
     }

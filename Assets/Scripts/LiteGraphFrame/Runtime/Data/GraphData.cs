@@ -49,7 +49,7 @@ namespace LiteGraphFrame
                                 port.FieldName = (string)portJsonData["FieldName"];
                                 string typeName = (string)portJsonData["TypeName"];
                                 string fieldValue = (string)portJsonData["FieldValue"];
-                                port.FieldValue = ParseRuntimeUtil.ToObject(typeName, fieldValue);
+                                port.FieldValue = ValuePraseUtil.ToObject(typeName, fieldValue);
                             }
                             var isInputPort = (bool)portJsonData["IsInputPort"];
                             if (isInputPort)
