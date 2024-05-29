@@ -23,7 +23,7 @@ namespace LiteGraphFrame
                 if (type.IsClass && !type.IsAbstract && type.IsSubclassOf(baseType) && !noGenerateType.IsAssignableFrom(type))
                 {
                     var typeName = type.Name;
-                    registerCode.Append($"            RegisterCreateNodeFunc(\"{typeName}\", () => {{ return new {typeName}(); }});\r\n");
+                    registerCode.AppendLine($"            RegisterCreateNodeFunc(\"{typeName}\", () => {{ return new {typeName}(); }});");
                 }
             }
 
@@ -45,18 +45,18 @@ namespace LiteGraphFrame
             var code = new StringBuilder();
             string head = CodeGenerateConfig.GenerateStart;
             string tail = CodeGenerateConfig.GenerateEnd;
-            code.Append(head);
-            code.Append($"namespace {typeof(NodeTypeGenerator).Namespace}\r\n");
-            code.Append("{\r\n");
-            code.Append($"    public static partial class {typeof(LiteGraphNodeFactory).Name}\r\n");
-            code.Append("    {\r\n");
-            code.Append("        public static void InitCreateFuncDict()\r\n");
-            code.Append("        {\r\n");
-            code.Append(registerCode);
-            code.Append("        }\r\n");
-            code.Append("    }\r\n");
-            code.Append("}\r\n");
-            code.Append(tail);
+            code.AppendLine(head);
+            code.AppendLine($"namespace {typeof(NodeTypeGenerator).Namespace}");
+            code.AppendLine("{");
+            code.AppendLine($"    public static partial class {typeof(LiteGraphNodeFactory).Name}");
+            code.AppendLine("    {");
+            code.AppendLine("        public static void InitCreateFuncDict()");
+            code.AppendLine("        {");
+            code.AppendLine(registerCode);
+            code.AppendLine("        }");
+            code.AppendLine("    }");
+            code.AppendLine("}");
+            code.AppendLine(tail);
             return code.ToString();
 
         }

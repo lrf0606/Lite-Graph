@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using UnityEngine;
+
 
 namespace LiteGraphFrame
 {
@@ -34,30 +34,41 @@ namespace LiteGraphFrame
                     }
                     else
                     {
-                        code = CodeGenerateConfig.UsingNamespace + code; // 加个using防止后续编辑器自动不全using到错误位置
+                        code = $"{CodeGenerateConfig.UsingNamespace}{Environment.NewLine}{code}"; // 加个using防止后续编辑器自动不全using到错误位置
+                        
                     }
                     File.WriteAllText(filePath, code);
                 }
             }
         }
 
-        private static string GetCodeString(Type type) 
+        private static string GetCodeString(Type type)
         {
             var code = new StringBuilder();
             string head = CodeGenerateConfig.GenerateStart;
             string tail = CodeGenerateConfig.GenerateEnd;
-            code.Append(head);
-            code.Append($"namespace {type.Namespace}\r\n");
-            code.Append("{\r\n");
-            code.Append($"    public partial class {type.Name} : {typeof(NodeRuntime).Name}\r\n");
-            code.Append("    {\r\n");
-            code.Append(GetTypeFieldAndFucntionCode(type));
-            code.Append(GetTypeEventIdCode(type));
-            code.Append(GetTypeExecuteLogicCode(type));
-            code.Append("    }\r\n");
-            code.Append("}\r\n");
+            code.AppendLine(head);
+            code.AppendLine($"namespace {type.Namespace}");
+            code.AppendLine("{");
+            code.AppendLine($"    public partial class {type.Name} : {typeof(NodeRuntime).Name}");
+            code.AppendLine("    {");
+            var fieldCode = GetTypeFieldAndFucntionCode(type);
+            if (!String.IsNullOrEmpty(fieldCode))
+            {
+                code.AppendLine(fieldCode);
+            }
+            if (type.IsSubclassOf(typeof(EventNodeData)))
+            {
+                code.AppendLine(GetTypeEventIdCode(type));
+            }
+            if (!type.IsSubclassOf(typeof(EventNodeData)))
+            {
+                code.AppendLine(GetTypeExecuteLogicCode(type));
+            }
+            code.AppendLine("    }");
+            code.AppendLine("}");
 
-            code.Append(tail);
+            code.AppendLine(tail);
 
             return code.ToString();
         }
@@ -74,7 +85,7 @@ namespace LiteGraphFrame
                 {
                     continue;
                 }
-                code.Append($"        public {fieldInfo.FieldType} {fieldInfo.Name};\r\n");
+                code.AppendLine($"        public {fieldInfo.FieldType} {fieldInfo.Name};");
                 fields.Add(fieldInfo);
             }
 
@@ -85,67 +96,59 @@ namespace LiteGraphFrame
                 {
                     continue;
                 }
-                code.Append($"        public {fieldInfo.FieldType} {fieldInfo.Name};\r\n");
+                code.AppendLine($"        public {fieldInfo.FieldType} {fieldInfo.Name};");
                 fields.Add(fieldInfo);
             }
 
-            code.Append("\r\n");
-            
             if (fields.Count == 0)
             {
                 return code.ToString();
             }
+            code.AppendLine();
 
             // functions
-            code.Append("        public override object GetValue(string fieldName)\r\n");
-            code.Append("        {\r\n");
-            code.Append("            switch (fieldName)\r\n");
-            code.Append("            {\r\n");
+            code.AppendLine("        public override object GetValue(string fieldName)");
+            code.AppendLine("        {");
+            code.AppendLine("            switch (fieldName)");
+            code.AppendLine("            {");
             foreach(var field in fields)
             {
-                code.Append($"                case \"{field.Name}\": return {field.Name};\r\n");
+                code.AppendLine($"                case \"{field.Name}\": return {field.Name};");
             }
-            code.Append("                default: return null;\r\n");
-            code.Append("            }\r\n");
-            code.Append("        }\r\n");
-            code.Append("        public override void SetValue(string fieldName, object value)\r\n");
-            code.Append("        {\r\n");
-            code.Append("            switch (fieldName)\r\n");
-            code.Append("            {\r\n");
+            code.AppendLine("                default: return null;");
+            code.AppendLine("            }");
+            code.AppendLine("        }");
+            code.AppendLine("        public override void SetValue(string fieldName, object value)");
+            code.AppendLine("        {");
+            code.AppendLine("            switch (fieldName)");
+            code.AppendLine("            {");
             foreach (var field in fields)
             {
-                code.Append($"                case \"{field.Name}\": {{ {field.Name} = ({field.FieldType})value; break; }};\r\n");
+                code.AppendLine($"                case \"{field.Name}\": {{ {field.Name} = ({field.FieldType})value; break; }};");
             }
-            code.Append("                default: break;\r\n");
-            code.Append("            }\r\n");
-            code.Append("        }\r\n");
+            code.AppendLine("                default: break;");
+            code.AppendLine("            }");
+            code.AppendLine("        }");
 
             return code.ToString();
         }
 
         private static string GetTypeEventIdCode(Type type)
         {
-            if (!type.IsSubclassOf(typeof(EventNodeData)))
-            {
-                return "";
-            }
+          
             var code = new StringBuilder();
             var eventNode = Activator.CreateInstance(type);
             var methodInfo = type.GetMethod("GetEventId");
             int eventId = (int)methodInfo.Invoke(eventNode, null);
-            code.Append("        public override int GetEventId()\r\n");
-            code.Append("        {\r\n");
-            code.Append($"            return {eventId};\r\n");
-            code.Append("        }\r\n");
+            code.AppendLine("        public override int GetEventId()");
+            code.AppendLine("        {");
+            code.AppendLine($"            return {eventId};");
+            code.AppendLine("        }");
             return code.ToString();
         }
 
         private static string GetTypeExecuteLogicCode(Type type)
         {
-            if (type.IsSubclassOf(typeof(EventNodeData)))
-            {
-                return "";
-            }
             var code = new StringBuilder();
             string filePath = $"{CodeGenerateConfig.NodeRuntimeDirectory}/{type.Name}.cs";
             string oldExecLogicCode = "";
@@ -156,12 +159,12 @@ namespace LiteGraphFrame
             }
             if (string.IsNullOrEmpty(oldExecLogicCode))
             {
-                code.Append(CodeGenerateConfig.ExecuteLogicStart);
-                code.Append("        public override void ExecuteLogic()\r\n");
-                code.Append("        {\r\n");
-                code.Append("            \r\n");
-                code.Append("        }\r\n");
-                code.Append(CodeGenerateConfig.ExecuteLogicEnd);
+                code.AppendLine(CodeGenerateConfig.ExecuteLogicStart);
+                code.AppendLine("        public override void ExecuteLogic()");
+                code.AppendLine("        {");
+                code.AppendLine("            ");
+                code.AppendLine("        }");
+                code.AppendLine(CodeGenerateConfig.ExecuteLogicEnd);
                 return code.ToString();
             }
             else

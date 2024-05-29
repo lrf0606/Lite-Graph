@@ -11,7 +11,20 @@ namespace LiteGraphFrame
             RegisterCreateNodeFunc("FunctionNodeTest1", () => { return new FunctionNodeTest1(); });
             RegisterCreateNodeFunc("FunctionNodeTest2", () => { return new FunctionNodeTest2(); });
             RegisterCreateNodeFunc("ValueNodeGetRandomInt", () => { return new ValueNodeGetRandomInt(); });
+
         }
     }
 }
 // === LiteGraphFrame Code Generate End ===
+
+
+
+
+
+
+
+
+
+
+
+

@@ -14,11 +14,11 @@ namespace LiteGraphFrame
         public const string NodeTypeFactorPath = "Assets/LiteGraphFiles/NodeFactory.cs";
         public const string NodeRuntimeDirectory = "Assets/LiteGraphFiles/Nodes/";
 
-        public const string GenerateStart = "// === LiteGraphFrame Code Generate Start ===\r\n";
-        public const string GenerateEnd = "// === LiteGraphFrame Code Generate End ===\r\n";
-        public const string ExecuteLogicStart = "        // === Execute Logic Start ===\r\n";
-        public const string ExecuteLogicEnd = "        // === Execute Logic End ===\r\n";
-        public const string UsingNamespace = "using System;\r\n";
+        public const string GenerateStart = "// === LiteGraphFrame Code Generate Start ===";
+        public const string GenerateEnd = "// === LiteGraphFrame Code Generate End ===";
+        public const string ExecuteLogicStart = "        // === Execute Logic Start ===";
+        public const string ExecuteLogicEnd = "        // === Execute Logic End ===";
+        public const string UsingNamespace = "using System;";
 
         // 获取以target替换source中以start开头end结尾的内容
         public static string ReplaceStringByStartAndEnd(string source, string target, string start, string end)
