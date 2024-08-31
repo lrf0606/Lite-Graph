@@ -27,12 +27,9 @@ namespace LiteGraphFrame
         // === Execute Logic Start ===
         public override void ExecuteLogic()
         {
-            Debug.Log($"FunctionNodeTest1.ExectueLogic,A={A}");
+            Debug.Log($"FunctionNodeTest1 ExecuteLogic A={A}");
         }
         // === Execute Logic End ===
     }
 }
 // === LiteGraphFrame Code Generate End ===
-
-
-

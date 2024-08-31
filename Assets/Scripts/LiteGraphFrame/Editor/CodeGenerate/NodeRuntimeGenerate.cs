@@ -11,22 +11,35 @@ namespace LiteGraphFrame
     {
         public static void Generate()
         {
-            string directory = CodeGenerateConfig.NodeRuntimeDirectory;
-            if (!Directory.Exists(directory))
-            {
-                Directory.CreateDirectory(directory);
-            }
+            GenerateNodeRuntimeCode(true);
+            GenerateNodeRuntimeCode(false);
+        }
 
+        private static string GetFilePath(bool isBuiltin, Type type)
+        {
+            string directory = isBuiltin ? CodeGenerateConfig.BuiltinNodeRuntimeDirectory : CodeGenerateConfig.CustomNodeRuntimeDirectory;
+            return $"{directory}/{type.Name}.cs";
+        }
+
+        private static void GenerateNodeRuntimeCode(bool isBuiltin)
+        {
             var baseType = typeof(NodeDataBase);
-
-            var noGenerateType = typeof(INoGenerate);
+            var builtinNodeType = typeof(IBuiltinNode);
             var assembly = typeof(NodeRuntimeGenerator).Assembly;
             foreach (var type in assembly.GetTypes()) 
             {
-                if (type.IsClass && !type.IsAbstract && type.IsSubclassOf(baseType) && !noGenerateType.IsAssignableFrom(type))
+                if (type.IsClass && !type.IsAbstract && type.IsSubclassOf(baseType))
                 {
-                    var code = GetCodeString(type);
-                    string filePath = $"{directory}/{type.Name}.cs";
+                    if (isBuiltin && !builtinNodeType.IsAssignableFrom(type))
+                    {
+                        continue;
+                    }
+                    if (!isBuiltin && builtinNodeType.IsAssignableFrom(type))
+                    {
+                        continue;
+                    }
+                    var code = GetCodeString(isBuiltin, type);
+                    var filePath = GetFilePath(isBuiltin, type);
                     if (File.Exists(filePath)) 
                     {
                         string source = File.ReadAllText(filePath);
@@ -42,7 +55,7 @@ namespace LiteGraphFrame
             }
         }
 
-        private static string GetCodeString(Type type)
+        private static string GetCodeString(bool isBuiltin, Type type)
         {
             var code = new StringBuilder();
             string head = CodeGenerateConfig.GenerateStart;
@@ -63,12 +76,12 @@ namespace LiteGraphFrame
             }
             if (!type.IsSubclassOf(typeof(EventNodeData)))
             {
-                code.AppendLine(GetTypeExecuteLogicCode(type));
+                code.AppendLine(GetTypeExecuteLogicCode(isBuiltin, type));
             }
             code.AppendLine("    }");
             code.AppendLine("}");
 
-            code.AppendLine(tail);
+            code.Append(tail);
 
             return code.ToString();
         }
@@ -147,10 +160,10 @@ namespace LiteGraphFrame
             return code.ToString();
         }
 
-        private static string GetTypeExecuteLogicCode(Type type)
+        private static string GetTypeExecuteLogicCode(bool isBuiltin, Type type)
         {
             var code = new StringBuilder();
-            string filePath = $"{CodeGenerateConfig.NodeRuntimeDirectory}/{type.Name}.cs";
+            var filePath = GetFilePath(isBuiltin, type);
             string oldExecLogicCode = "";
             if (File.Exists(filePath))
             {

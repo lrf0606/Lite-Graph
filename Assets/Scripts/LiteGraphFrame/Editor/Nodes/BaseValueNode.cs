@@ -3,28 +3,28 @@ using UnityEngine;
 namespace LiteGraphFrame
 {
     [NodeRegister("Value", "Create Vector2")]
-    sealed class ValueNodeCreateVector2 : ValueNodeData, INoGenerate
+    sealed class ValueNodeCreateVector2 : ValueNodeData, IBuiltinNode
     {
-        [NodeInput("")]
+        [NodeInput]
         public float X;
-        [NodeInput("")]
+        [NodeInput]
         public float Y;
 
-        [NodeOutput("")]
+        [NodeOutput]
         public Vector2 Vec2;
     }
 
     [NodeRegister("Value", "Create Vector3")]
-    sealed class ValueNodeCreateVector3 : ValueNodeData, INoGenerate
+    sealed class ValueNodeCreateVector3 : ValueNodeData, IBuiltinNode
     {
-        [NodeInput("")]
+        [NodeInput]
         public float X;
-        [NodeInput("")]
+        [NodeInput]
         public float Y;
-        [NodeInput("")]
+        [NodeInput]
         public float Z;
 
-        [NodeOutput("")]
+        [NodeOutput]
         public Vector3 Vec3;
     }
 }

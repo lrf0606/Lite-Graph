@@ -5,23 +5,13 @@ namespace LiteGraphFrame
     [AttributeUsage(AttributeTargets.Class)]
     class NodeRegisterAttribute : Attribute
     {
-        public string[] Titles { get; private set; }
+        public string Directory;
+        public string Title;
 
-        public NodeRegisterAttribute(params string[] titles)
+        public NodeRegisterAttribute(string directory, string title)
         {
-            Titles = titles;
-        }
-
-        public string GetLastTitle()
-        {
-            if (Titles.Length == 0)
-            {
-                return string.Empty;
-            }
-            else
-            {
-                return Titles[Titles.Length - 1];
-            }
+            Directory = directory;
+            Title = title;
         }
     }
 }

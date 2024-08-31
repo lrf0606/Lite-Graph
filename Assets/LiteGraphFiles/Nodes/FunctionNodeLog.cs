@@ -1,20 +1,17 @@
 using System;
+using UnityEngine;
 // === LiteGraphFrame Code Generate Start ===
 namespace LiteGraphFrame
 {
-    public partial class ValueNodeCreateVector2 : NodeRuntime
+    public partial class FunctionNodeLog : NodeRuntime
     {
-        public System.Single X;
-        public System.Single Y;
-        public UnityEngine.Vector2 Vec2;
+        public System.String LogMsg;
 
         public override object GetValue(string fieldName)
         {
             switch (fieldName)
             {
-                case "X": return X;
-                case "Y": return Y;
-                case "Vec2": return Vec2;
+                case "LogMsg": return LogMsg;
                 default: return null;
             }
         }
@@ -22,9 +19,7 @@ namespace LiteGraphFrame
         {
             switch (fieldName)
             {
-                case "X": { X = (System.Single)value; break; };
-                case "Y": { Y = (System.Single)value; break; };
-                case "Vec2": { Vec2 = (UnityEngine.Vector2)value; break; };
+                case "LogMsg": { LogMsg = (System.String)value; break; };
                 default: break;
             }
         }
@@ -32,7 +27,7 @@ namespace LiteGraphFrame
         // === Execute Logic Start ===
         public override void ExecuteLogic()
         {
-            Vec2 = new UnityEngine.Vector2(X, Y);
+            Debug.Log($"Log:{LogMsg}");
         }
         // === Execute Logic End ===
     }

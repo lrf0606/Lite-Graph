@@ -27,12 +27,9 @@ namespace LiteGraphFrame
         // === Execute Logic Start ===
         public override void ExecuteLogic()
         {
-            Debug.Log($"FunctionNodeTest2.ExectueLogic,vec3={vec3}");
+            Debug.Log($"FunctionNodeTest2 ExecuteLogic vec3={vec3}");
         }
         // === Execute Logic End ===
     }
 }
 // === LiteGraphFrame Code Generate End ===
-
-
-

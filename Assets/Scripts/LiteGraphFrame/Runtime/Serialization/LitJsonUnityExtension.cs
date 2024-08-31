@@ -18,12 +18,10 @@ namespace LitJson
             ParseObject2StringDict = new Dictionary<string, Object2StringDelegate>();
             ParseString2ObjectDict = new Dictionary<string, String2ObjectDelegate>();
 
+            RegisterToString();
             RegisterToObject();
         }
 
-#if UNITY_EDITOR
-        [UnityEditor.InitializeOnLoadMethod]
-#endif
         private static void RegisterToString()
         {
             // int
@@ -33,7 +31,7 @@ namespace LitJson
             // double
             RegisterObject2String((double val) => { return val.ToString(); });
             // string
-            RegisterObject2String((string val) => { return val; });
+            RegisterObject2String((string val) => { return string.IsNullOrEmpty(val) ? "" : val; });
             // bool
             RegisterObject2String((bool val) => { return val.ToString(); });
             // vector2

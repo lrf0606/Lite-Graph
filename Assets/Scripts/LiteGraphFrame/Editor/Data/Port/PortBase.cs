@@ -47,6 +47,8 @@ namespace LiteGraphFrame
             return true;
         }
 
+        public abstract void OnConnectedChange(bool isConnected, PortDataBase otherPortData);
+
         public override JsonData Encoder()
         {
             var jsonData = new JsonData();

@@ -8,7 +8,7 @@ namespace LiteGraphFrame
         [NodeInput("range max")]
         public int Max = 100;
 
-        [NodeOutput()]
+        [NodeOutput]
         public int R;
     }
 }

@@ -1,6 +1,7 @@
 using LitJson;
 using System;
 using System.IO;
+using System.Reflection;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -103,6 +104,7 @@ namespace LiteGraphFrame
 
         void GenerateNode()
         {
+            CodeGenerateConfig.ValidateDirectory();
             NodeTypeGenerator.Generate();
             NodeRuntimeGenerator.Generate();
             AssetDatabase.Refresh();

@@ -2,19 +2,15 @@ using System;
 // === LiteGraphFrame Code Generate Start ===
 namespace LiteGraphFrame
 {
-    public partial class ValueNodeCreateVector2 : NodeRuntime
+    public partial class ControlNodeIf : NodeRuntime
     {
-        public System.Single X;
-        public System.Single Y;
-        public UnityEngine.Vector2 Vec2;
+        public System.Boolean BoolValue;
 
         public override object GetValue(string fieldName)
         {
             switch (fieldName)
             {
-                case "X": return X;
-                case "Y": return Y;
-                case "Vec2": return Vec2;
+                case "BoolValue": return BoolValue;
                 default: return null;
             }
         }
@@ -22,9 +18,7 @@ namespace LiteGraphFrame
         {
             switch (fieldName)
             {
-                case "X": { X = (System.Single)value; break; };
-                case "Y": { Y = (System.Single)value; break; };
-                case "Vec2": { Vec2 = (UnityEngine.Vector2)value; break; };
+                case "BoolValue": { BoolValue = (System.Boolean)value; break; };
                 default: break;
             }
         }
@@ -32,7 +26,17 @@ namespace LiteGraphFrame
         // === Execute Logic Start ===
         public override void ExecuteLogic()
         {
-            Vec2 = new UnityEngine.Vector2(X, Y);
+            
+        }
+
+        public override NodeRuntime GetNextExecuteNode()
+        {
+            var connectedPort = BoolValue ? OutputFlowPortList[0].ConnectedPort : OutputFlowPortList[1].ConnectedPort;
+            if (connectedPort != null)
+            {
+                return connectedPort.Node;
+            }
+            return null;
         }
         // === Execute Logic End ===
     }

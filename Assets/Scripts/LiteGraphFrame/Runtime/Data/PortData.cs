@@ -13,6 +13,8 @@ namespace LiteGraphFrame
         public PortRuntime ConnectedPort;
         public string FieldName;
         public object FieldValue;
+        public string SourceTypeName;
+        public string TargetTypeName;
     }
 
 

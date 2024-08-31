@@ -7,13 +7,10 @@ namespace LiteGraphFrame
             NodeType = ENodeType.Event;
         }
 
-        // 事件节点只有一个输出流程端口
         protected override void InitlizationPort()
         {
-            var outputFlowPort = new FlowPortData();
-            outputFlowPort.Initlization(this, false, "Out");
-            PortList.Add(outputFlowPort);
-            PortDict[outputFlowPort.MyGUID] = outputFlowPort;
+            // 事件节点只有一个输出流程端口
+            AddFlowPort(false, "Out");
         }
 
         public abstract int GetEventId();

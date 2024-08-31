@@ -12,6 +12,14 @@ namespace LiteGraphFrame
     {
         [NodeInput("this is a vec3")]
         public UnityEngine.Vector3 vec3;
+
+    }
+
+    [NodeRegister("Func", "Log")]
+    sealed class FunctionNodeLog : FunctionNodeData
+    {
+        [NodeInput]
+        public string LogMsg;
     }
 }
 

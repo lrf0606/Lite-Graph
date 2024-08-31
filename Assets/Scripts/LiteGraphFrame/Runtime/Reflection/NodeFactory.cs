@@ -11,9 +11,6 @@ namespace LiteGraphFrame
         static LiteGraphNodeFactory()
         {
             m_CreateFuncDict = new Dictionary<string, CreateRuntimeNodeDeleagte>();
-            // 新增内置节点，在这里注册
-            RegisterCreateNodeFunc("ValueNodeCreateVector2", () => { return new ValueNodeCreateVector2(); });
-            RegisterCreateNodeFunc("ValueNodeCreateVector3", () => { return new ValueNodeCreateVector3(); });
         }
 
         public static void RegisterCreateNodeFunc(string nodeType, CreateRuntimeNodeDeleagte func)

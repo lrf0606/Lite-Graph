@@ -1,24 +1,36 @@
-using System.Diagnostics;
 using System.IO;
 
 namespace LiteGraphFrame
 {
-    // 不进行代码生成的node继承此接口
-    public interface INoGenerate
+    // 内置节点继承此接口
+    public interface IBuiltinNode
     {
 
     }
 
     public static class CodeGenerateConfig
     {
-        public const string NodeTypeFactorPath = "Assets/LiteGraphFiles/NodeFactory.cs";
-        public const string NodeRuntimeDirectory = "Assets/LiteGraphFiles/Nodes/";
+        public const string BuiltinNodeRuntimeDirectory = "Assets/Scripts/LiteGraphFrame/Runtime/Nodes"; // 内置节点存放目录
+        public const string CustomNodeRuntimeDirectory = "Assets/LiteGraphFiles/Nodes"; // 自定义节点存放目录
+        public const string NodeFactoryFileName = "NodeFactory.cs";
 
         public const string GenerateStart = "// === LiteGraphFrame Code Generate Start ===";
         public const string GenerateEnd = "// === LiteGraphFrame Code Generate End ===";
         public const string ExecuteLogicStart = "        // === Execute Logic Start ===";
         public const string ExecuteLogicEnd = "        // === Execute Logic End ===";
         public const string UsingNamespace = "using System;";
+
+        public static void ValidateDirectory()
+        {
+            if (!Directory.Exists(BuiltinNodeRuntimeDirectory))
+            {
+                Directory.CreateDirectory(BuiltinNodeRuntimeDirectory);
+            }
+            if (!Directory.Exists(CustomNodeRuntimeDirectory))
+            {
+                Directory.CreateDirectory(CustomNodeRuntimeDirectory);
+            }
+        }
 
         // 获取以target替换source中以start开头end结尾的内容
         public static string ReplaceStringByStartAndEnd(string source, string target, string start, string end)

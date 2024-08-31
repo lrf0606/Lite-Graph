@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 // === LiteGraphFrame Code Generate Start ===
 namespace LiteGraphFrame
@@ -32,14 +33,10 @@ namespace LiteGraphFrame
         // === Execute Logic Start ===
         public override void ExecuteLogic()
         {
-            var i = Random.Range(Min, Max);
-            Debug.Log($"ValueNodeGetRandomInt Min={Min} Max={Max} randomint={i}");
-            R = i;
+            R = UnityEngine.Random.Range(Min, Max);
+            Debug.Log($"ValueNodeGetRandomInt ExecuteLogic Min={Min} Max={Max} R={R}");
         }
         // === Execute Logic End ===
     }
 }
 // === LiteGraphFrame Code Generate End ===
-
-
-

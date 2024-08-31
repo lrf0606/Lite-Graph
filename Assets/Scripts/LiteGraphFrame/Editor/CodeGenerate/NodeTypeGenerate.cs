@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Text;
 
@@ -7,27 +8,15 @@ namespace LiteGraphFrame
     {
         public static void Generate()
         {
-            string path = CodeGenerateConfig.NodeTypeFactorPath;
-            var directory =  Path.GetDirectoryName(path);
-            if (!Directory.Exists(directory))
-            { 
-                Directory.CreateDirectory(directory);
-            }
+            GenerateNodeTypeCode(true);
+            GenerateNodeTypeCode(false);
+        }
 
-            var baseType = typeof(NodeDataBase);
-            var noGenerateType = typeof(INoGenerate);
-            var registerCode = new StringBuilder();
-            var assembly = typeof(NodeTypeGenerator).Assembly;
-            foreach (var type in assembly.GetTypes())
-            {
-                if (type.IsClass && !type.IsAbstract && type.IsSubclassOf(baseType) && !noGenerateType.IsAssignableFrom(type))
-                {
-                    var typeName = type.Name;
-                    registerCode.AppendLine($"            RegisterCreateNodeFunc(\"{typeName}\", () => {{ return new {typeName}(); }});");
-                }
-            }
-
-            var code = GetCodeString(registerCode.ToString());
+        private static void GenerateNodeTypeCode(bool isBuiltin)
+        {
+            string directory = isBuiltin ? CodeGenerateConfig.BuiltinNodeRuntimeDirectory : CodeGenerateConfig.CustomNodeRuntimeDirectory;
+            string path = $"{directory}/{CodeGenerateConfig.NodeFactoryFileName}";
+            var code = CreateCodeString(isBuiltin);
             if (File.Exists(path))
             {
                 var source = File.ReadAllText(path);
@@ -35,28 +24,49 @@ namespace LiteGraphFrame
             }
             else
             {
-                code = CodeGenerateConfig.UsingNamespace + code; // 加个using防止后续编辑器自动不全using到错误位置
+                code = $"{CodeGenerateConfig.UsingNamespace}{Environment.NewLine}{code}"; // 加个using防止后续编辑器自动不全using到错误位置
             }
             File.WriteAllText(path, code);
         }
 
-        private static string GetCodeString(string registerCode)
+        private static string CreateCodeString(bool isBuiltin)
         {
             var code = new StringBuilder();
             string head = CodeGenerateConfig.GenerateStart;
             string tail = CodeGenerateConfig.GenerateEnd;
+            string funcName = isBuiltin ? "InitBuiltinFactory" : "InitCustomFactory";
+            var baseType = typeof(NodeDataBase);
+            var builtinNodeType = typeof(IBuiltinNode);
+            var assembly = typeof(NodeTypeGenerator).Assembly;
             code.AppendLine(head);
             code.AppendLine($"namespace {typeof(NodeTypeGenerator).Namespace}");
             code.AppendLine("{");
             code.AppendLine($"    public static partial class {typeof(LiteGraphNodeFactory).Name}");
             code.AppendLine("    {");
-            code.AppendLine("        public static void InitCreateFuncDict()");
+            code.AppendLine($"        public static void {funcName}()");
             code.AppendLine("        {");
-            code.AppendLine(registerCode);
+
+            foreach (var type in assembly.GetTypes())
+            {
+                if (type.IsClass && !type.IsAbstract && type.IsSubclassOf(baseType))
+                {
+                    if (isBuiltin && !builtinNodeType.IsAssignableFrom(type))
+                    {
+                        continue;
+                    }
+                    if (!isBuiltin && builtinNodeType.IsAssignableFrom(type))
+                    {
+                        continue;
+                    }
+                    var typeName = type.Name;
+                    code.AppendLine($"            RegisterCreateNodeFunc(\"{typeName}\", () => {{ return new {typeName}(); }});");
+                }
+            }
+
             code.AppendLine("        }");
             code.AppendLine("    }");
             code.AppendLine("}");
-            code.AppendLine(tail);
+            code.Append(tail);
             return code.ToString();
 
         }

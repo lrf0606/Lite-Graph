@@ -1,6 +1,7 @@
 using LitJson;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 
 namespace LiteGraphFrame
@@ -30,6 +31,8 @@ namespace LiteGraphFrame
         {
             InitlizationPort();
         }
+
+        protected abstract void InitlizationPort();
 
         public override JsonData Encoder()
         {
@@ -76,6 +79,44 @@ namespace LiteGraphFrame
             }
         }
 
-        protected abstract void InitlizationPort();
+        public void AddFlowPort(bool isInputPort = true, string name = "")
+        {
+            var flowPort = new FlowPortData();
+            flowPort.Initlization(this, isInputPort, name);
+            PortList.Add(flowPort);
+            PortDict[flowPort.MyGUID] = flowPort;
+        }
+
+        public void AddInputFieldPorts()
+        {
+            foreach (var field in this.GetType().GetFields())
+            {
+                var inputAttribute = field.GetCustomAttribute<NodeInputAttribute>();
+                if (inputAttribute != null)
+                {
+                    var inputFieldPort = new FieldPortData();
+                    inputFieldPort.Initlization(this, true, field.Name);
+                    inputFieldPort.InitFieldIfno(field, inputAttribute.FiledDescription);
+                    PortList.Add(inputFieldPort);
+                    PortDict[inputFieldPort.MyGUID] = inputFieldPort;
+                }
+            }
+        }
+
+        public void AddOutputFieldPorts()
+        {
+            foreach (var field in this.GetType().GetFields())
+            {
+                var outputAttribut = field.GetCustomAttribute<NodeOutputAttribute>();
+                if (outputAttribut != null)
+                {
+                    var outputFieldPort = new FieldPortData();
+                    outputFieldPort.Initlization(this, false, field.Name);
+                    outputFieldPort.InitFieldIfno(field, outputAttribut.FiledDescription);
+                    PortList.Add(outputFieldPort);
+                    PortDict[outputFieldPort.MyGUID] = outputFieldPort;
+                }
+            }
+        }
     }
 }

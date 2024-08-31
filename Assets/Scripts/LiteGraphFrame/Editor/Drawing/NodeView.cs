@@ -26,7 +26,7 @@ namespace LiteGraphFrame
             {
 
                 var titleAttribute = NodeData.GetType().GetCustomAttribute<NodeRegisterAttribute>();
-                this.title = titleAttribute.GetLastTitle();
+                this.title = titleAttribute.Title;
             }
             else
             {

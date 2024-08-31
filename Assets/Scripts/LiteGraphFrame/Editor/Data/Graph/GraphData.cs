@@ -61,11 +61,13 @@ namespace LiteGraphFrame
             NodeConnectionDict[fromNodeData.MyGUID][fromPortData.MyGUID] = connectionInfo1;
             fromNodeData.PortConnectionDict[fromPortData.MyGUID] = connectionInfo1;
             fromPortData.ConnectionInfo = connectionInfo1;
+            fromPortData.OnConnectedChange(true, toPortData);
 
             var connectionInfo2 = new ConnectionInfo(fromNodeData, fromPortData);
             NodeConnectionDict[toNodeData.MyGUID][toPortData.MyGUID] = connectionInfo2;
             toNodeData.PortConnectionDict[toPortData.MyGUID] = connectionInfo2;
             toPortData.ConnectionInfo = connectionInfo2;
+            toPortData.OnConnectedChange(true, fromPortData);
         }
 
         public void DisconnectNode(NodeDataBase fromNodeData, PortDataBase fromPortData, NodeDataBase toNodeData, PortDataBase toPortData)
@@ -73,10 +75,12 @@ namespace LiteGraphFrame
             NodeConnectionDict[fromNodeData.MyGUID].Remove(fromPortData.MyGUID);
             fromNodeData.PortConnectionDict.Remove(fromPortData.MyGUID);
             fromPortData.ConnectionInfo.Clear();
+            fromPortData.OnConnectedChange(false, toPortData);
 
             NodeConnectionDict[toNodeData.MyGUID].Remove(toPortData.MyGUID);
             toNodeData.PortConnectionDict.Remove(toPortData.MyGUID);
             toPortData.ConnectionInfo.Clear();
+            toPortData.OnConnectedChange(false, fromPortData);
         }
 
         public void UpdateNodePosition(NodeDataBase nodeData, float x, float y)

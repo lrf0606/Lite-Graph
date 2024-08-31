@@ -1,3 +1,4 @@
+using System;
 // === LiteGraphFrame Code Generate Start ===
 namespace LiteGraphFrame
 {
@@ -30,6 +31,7 @@ namespace LiteGraphFrame
                 default: break;
             }
         }
+
         // === Execute Logic Start ===
         public override void ExecuteLogic()
         {

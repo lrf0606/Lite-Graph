@@ -29,8 +29,8 @@ namespace LiteGraphFrame
                 }
             }
 
-            // 根据找到的子类构建节点菜单
-            HashSet<string> titleSet = new HashSet<string>();
+            var titleDict = new Dictionary<string, List<Type>>();
+
             foreach (var type in types)
             {
                 var titileAttribute = type.GetCustomAttribute<NodeRegisterAttribute>();
@@ -38,36 +38,28 @@ namespace LiteGraphFrame
                 {
                     continue;
                 }
-                if (titileAttribute.Titles == null)
+                if (titleDict.TryGetValue(titileAttribute.Directory, out List<Type> typeList))
                 {
-                    Debug.LogWarning($"{type.Name} NodeTitleAttribute is null");
-                    continue;
+                    typeList.Add(type);
                 }
-                int length = titileAttribute.Titles.Length;
-                for (int i = 0; i < length; i++)
+                else
                 {
-                    string title = titileAttribute.Titles[i];
-                    if (string.IsNullOrEmpty(title))
-                    {
-                        continue;
-                    }
-                    if (titleSet.Contains(title))
-                    {
-                        continue;
-                    }
-                    if (i == length - 1)
-                    {
-                        var entry = new SearchTreeEntry(new GUIContent(title));
-                        entry.level = i + 1;
-                        entry.userData = type; // 保存菜单代表的节点类型，用于选中后创建节点
-                        searchTreeEntries.Add(entry);
-                    }
-                    else
-                    {
-                        var group = new SearchTreeGroupEntry(new GUIContent(title), i + 1);
-                        searchTreeEntries.Add(group);
-                    }
-                    titleSet.Add(title);
+                    titleDict[titileAttribute.Directory] = new List<Type> { type };
+                }
+            }
+
+            foreach (var kv in titleDict)
+            {
+                var directory = kv.Key;
+                var group = new SearchTreeGroupEntry(new GUIContent(kv.Key), 1);
+                searchTreeEntries.Add(group);
+                foreach (var type in kv.Value)
+                {
+                    var title = type.GetCustomAttribute<NodeRegisterAttribute>().Title;
+                    var entry = new SearchTreeEntry(new GUIContent(title));
+                    entry.level = 2;
+                    entry.userData = type; // 保存菜单代表的节点类型，用于选中后创建节点
+                    searchTreeEntries.Add(entry);
                 }
             }
             return searchTreeEntries;

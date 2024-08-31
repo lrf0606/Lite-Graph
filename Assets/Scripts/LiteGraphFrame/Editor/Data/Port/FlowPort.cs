@@ -22,5 +22,10 @@ namespace LiteGraphFrame
             }
             return true;
         }
+
+        public override void OnConnectedChange(bool isConnected, PortDataBase otherPortData)
+        {
+            
+        }
     }
 }
