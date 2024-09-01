@@ -1,8 +1,5 @@
-using LitJson;
 using System;
 using System.IO;
-using System.Reflection;
-using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -11,10 +8,14 @@ namespace LiteGraphFrame
 {
     class LiteGraphEditorWindow : EditorWindow
     {
-        [Serialize]
-        private string m_AssetGUID; // 重载或启动unity时确保未关闭的EditorWindow资源数据存在
+        [SerializeField]
+        private string m_AssetGUID; // 序列化字段，保证界面重载时数据存在
 
-        public string AssetGUID { get { return m_AssetGUID; } }
+        public string AssetGUID
+        {
+            get { return m_AssetGUID; }
+            private set { m_AssetGUID = value; }
+        }
 
         private GraphData m_GraphData;
 
@@ -28,18 +29,23 @@ namespace LiteGraphFrame
         {
         }
 
-        private void OnEnable()
+        private void Update()
         {
-            Debug.Log("OnEnable  " + m_AssetGUID);
-            if (!string.IsNullOrEmpty(m_AssetGUID) && m_GraphData == null)
+            if (m_GraphData == null && AssetGUID != null)
             {
-                Initlization(m_AssetGUID);
+                Initlization(AssetGUID);
             }
+            if (m_GraphData == null)
+            {
+                Close();
+                return;
+            }
+            m_GraphView.OnUpdate();
         }
 
         public void Initlization(string guid)
         {
-            m_AssetGUID = guid;
+            AssetGUID = guid;
             var assetPath = AssetDatabase.GUIDToAssetPath(guid);
             if (!LiteGraphFileUtil.IsFileExist(assetPath))
             {
@@ -76,14 +82,14 @@ namespace LiteGraphFrame
 
         void SaveAsset()
         {
-            var path = AssetDatabase.GUIDToAssetPath(m_AssetGUID);
+            var path = AssetDatabase.GUIDToAssetPath(AssetGUID);
             LiteGraphFileUtil.WriteToDisk(path, m_GraphData.Encoder().ToJson());
             AssetDatabase.Refresh();
         }
 
         void SaveAs()
         {
-            var curPath = AssetDatabase.GUIDToAssetPath(m_AssetGUID);
+            var curPath = AssetDatabase.GUIDToAssetPath(AssetGUID);
             string directory = Path.GetDirectoryName(curPath);
             string newPath = EditorUtility.SaveFilePanel("创建蓝图文件", directory, LiteGraphEditorUtil.NewFile, LiteGraphEditorUtil.Extension);
             if (!string.IsNullOrEmpty(newPath))

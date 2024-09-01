@@ -14,9 +14,20 @@ namespace LiteGraphFrame
 
         private LiteGraphSearchWindow m_SearchWindow;
 
+        private Vector2 m_CachedMousePosition;
+
         public LiteGraphView(LiteGraphEditorWindow ownerEditorWindow)
         {
             m_OwnerEditorWindow = ownerEditorWindow;
+        }
+
+        public void OnUpdate()
+        {
+
+        }
+
+        private string SerializeGraphElementsImplementation(IEnumerable<GraphElement> elements)
+        {
         }
 
         public void Initlization(GraphData graphData)
@@ -35,6 +46,12 @@ namespace LiteGraphFrame
             nodeCreationRequest = OnNodeCreationRequest;
             // 监听视图变化
             graphViewChanged = OnGraphViewChanged;
+            // 复制粘贴功能
+            serializeGraphElements = SerializeGraphElementsImplementation; // todo
+            canPasteSerializedData = CanPasteSerializedDataImplementation; // todo
+            unserializeAndPaste = UnserializeAndPasteImplementation; // todo
+            // 监听鼠标移动
+            RegisterCallback<MouseMoveEvent>(OnMouseMoveEvent);
             // 创建节点和连线
             var nodeViewDict = new Dictionary<string, NodeView>();
             foreach(var nodeData in m_GraphData.NodeDict.Values)
@@ -198,6 +215,24 @@ namespace LiteGraphFrame
                 compatiblePorts.Add(targetPortView);
             }
             return compatiblePorts;
+        }
+        private bool CanPasteSerializedDataImplementation(string serializedData)
+        {
+            return false;
+        }
+
+        private void UnserializeAndPasteImplementation(string operationName, string serializedData)
+        {
+        }
+
+        private void OnMouseMoveEvent(MouseMoveEvent evt)
+        {
+            m_CachedMousePosition = evt.mousePosition;
+        }
+
+        private void DeleteSelectionImplementation(string operationName, AskUser askUser)
+        {
+            Debug.Log($"lrf1111 {operationName} {askUser}");
         }
     }
 }

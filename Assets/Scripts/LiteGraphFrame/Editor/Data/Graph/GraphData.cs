@@ -1,7 +1,6 @@
 using LitJson;
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace LiteGraphFrame
 {
@@ -11,7 +10,6 @@ namespace LiteGraphFrame
 
         public Dictionary<string, NodeDataBase> NodeDict { get; private set; }
         public Dictionary<string, Dictionary<string, ConnectionInfo>> NodeConnectionDict { get; private set; }
-
         public Dictionary<int, NodeDataBase> EventNodeDict { get; private set; }
 
         public GraphData()
