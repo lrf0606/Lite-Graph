@@ -1,15 +1,15 @@
 namespace LiteGraphFrame
 {
-    abstract class ValueNodeData : NodeDataBase
+    abstract class LogicNodeData : NodeDataBase
     {
-        public ValueNodeData() : base()
+        public LogicNodeData() : base()
         {
-            NodeType = ENodeType.Value;
+            NodeType = ENodeType.Logic;
         }
 
         protected override void InitlizationPort()
         {
-            // 数据节点只有数据输入输出端口
+            // 逻辑节点只有数据输入输出端口
             AddInputFieldPorts();
             AddOutputFieldPorts();
         }

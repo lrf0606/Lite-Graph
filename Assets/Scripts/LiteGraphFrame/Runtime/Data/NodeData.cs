@@ -9,6 +9,7 @@ namespace LiteGraphFrame
         Function,
         Value,
         Control,
+        Logic,
     }
 
     public abstract class NodeRuntime

@@ -30,6 +30,7 @@ namespace LiteGraphFrame
 
         private void OnEnable()
         {
+            Debug.Log("OnEnable  " + m_AssetGUID);
             if (!string.IsNullOrEmpty(m_AssetGUID) && m_GraphData == null)
             {
                 Initlization(m_AssetGUID);
