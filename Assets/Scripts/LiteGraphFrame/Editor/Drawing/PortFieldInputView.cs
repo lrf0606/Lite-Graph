@@ -4,7 +4,6 @@ using UnityEngine.UIElements;
 
 namespace LiteGraphFrame
 {
-
     static class FieldPortUtil
     {
         public static string INT_NAME = typeof(int).Name;
@@ -59,12 +58,12 @@ namespace LiteGraphFrame
 
         public void RefreshVisible()
         {
-            this.visible = m_FieldPortData.ConnectionInfo.NodeData == null;
+            this.visible = !m_FieldPortData.IsConnected();
         }
 
         public void CreateFieldInput(FieldPortData portData)
         {
-            var fieldType = portData.SourceTypeName;
+            var fieldType = portData.FieldTypeName;
             var fieldValue = portData.FieldValue;
             if (fieldType == FieldPortUtil.INT_NAME)
             {

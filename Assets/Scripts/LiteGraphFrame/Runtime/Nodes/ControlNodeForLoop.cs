@@ -45,7 +45,7 @@ namespace LiteGraphFrame
                 return;
             }
             var bodyFollowingNodes = GetBodyFollowingNodes();
-            for (int i = First; i <= Last; i += Step)
+            for (int i = First; i < Last; i += Step)
             {
                 // Index值更新并传递
                 Index = i;
@@ -56,7 +56,10 @@ namespace LiteGraphFrame
                     node.Reset();
                 }
                 // Body下一节点执行
-                OutputFlowPortList[1].ConnectedPort?.Node.Execute();
+                foreach(var edge in m_OutputFlowPortList[1].Edges)
+                {
+                    edge.InputPort.Node.Execute();
+                }
             }
         }
 
@@ -64,9 +67,9 @@ namespace LiteGraphFrame
         {
             var result = new List<NodeRuntime>();
             var nodeSet = new HashSet<string>();
-            if (OutputFlowPortList[1].ConnectedPort != null)
+            foreach(var edge in m_OutputFlowPortList[1].Edges)
             {
-                FindNodes(ref result, ref nodeSet, OutputFlowPortList[1].ConnectedPort.Node);
+                FindNodes(ref result, ref nodeSet, edge.InputPort.Node);
             }
             return result;
         }
@@ -81,16 +84,16 @@ namespace LiteGraphFrame
             result.Add(curNode);
             foreach(var port in curNode.OutputPortList)
             {
-                if (port.ConnectedPort != null)
+                foreach(var edge in port.Edges)
                 {
-                    FindNodes(ref result, ref nodeSet, port.ConnectedPort.Node);
+                    FindNodes(ref result, ref nodeSet, edge.InputPort.Node);
                 }
             }
             foreach (var port in curNode.InputPortList)
             {
-                if (port.ConnectedPort != null)
+                foreach (var edge in port.Edges)
                 {
-                    FindNodes(ref result, ref nodeSet, port.ConnectedPort.Node);
+                    FindNodes(ref result, ref nodeSet, edge.OutputPort.Node);
                 }
             }
         }

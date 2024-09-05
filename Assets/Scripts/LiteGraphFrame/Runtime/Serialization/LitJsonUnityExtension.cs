@@ -10,13 +10,13 @@ namespace LitJson
 
     public static class ValuePraseUtil
     {
-        private static Dictionary<string, Object2StringDelegate> ParseObject2StringDict;
-        private static Dictionary<string, String2ObjectDelegate> ParseString2ObjectDict;
+        private static Dictionary<string, Object2StringDelegate> m_ParseObject2StringDict;
+        private static Dictionary<string, String2ObjectDelegate> m_ParseString2ObjectDict;
 
         static ValuePraseUtil()
         {
-            ParseObject2StringDict = new Dictionary<string, Object2StringDelegate>();
-            ParseString2ObjectDict = new Dictionary<string, String2ObjectDelegate>();
+            m_ParseObject2StringDict = new Dictionary<string, Object2StringDelegate>();
+            m_ParseString2ObjectDict = new Dictionary<string, String2ObjectDelegate>();
 
             RegisterToString();
             RegisterToObject();
@@ -66,27 +66,27 @@ namespace LitJson
 
         public static void RegisterObject2String<T>(Object2StringDelegate<T> func)
         {
-            ParseObject2StringDict[typeof(T).Name] = (object obj) => { return func((T)obj); };
+            m_ParseObject2StringDict[typeof(T).Name] = (object obj) => { return func((T)obj); };
         }
 
         public static void RegisterString2Object<T>(String2ObjectDelegate<T> func)
         {
-            ParseString2ObjectDict[typeof(T).Name] = (string str) => { return func(str); };
+            m_ParseString2ObjectDict[typeof(T).Name] = (string str) => { return func(str); };
         }
 
         public static void RegisterObject2String(string type, Object2StringDelegate func)
         {
-            ParseObject2StringDict[type] = func;
+            m_ParseObject2StringDict[type] = func;
         }
 
         public static void RegisterString2Object(string type, String2ObjectDelegate func)
         {
-            ParseString2ObjectDict[type] = func;
+            m_ParseString2ObjectDict[type] = func;
         }
 
         public static string ToString(string type, object obj)
         {
-            if (ParseObject2StringDict.TryGetValue(type, out var func))
+            if (m_ParseObject2StringDict.TryGetValue(type, out var func))
             {
                 return func(obj);
             }
@@ -98,7 +98,7 @@ namespace LitJson
 
         public static object ToObject(string type, string str)
         {
-            if (ParseString2ObjectDict.TryGetValue(type, out var func))
+            if (m_ParseString2ObjectDict.TryGetValue(type, out var func))
             {
                 return func(str);
             }

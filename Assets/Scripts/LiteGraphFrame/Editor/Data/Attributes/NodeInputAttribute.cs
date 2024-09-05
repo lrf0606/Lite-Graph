@@ -6,11 +6,12 @@ namespace LiteGraphFrame
     class NodeInputAttribute : Attribute
     {
         // ÊôÐÔÖÐÎÄÃèÊö
-        public string FiledDescription { get; private set; }
+        private string m_FiledDescription;
+        public string FiledDescription => m_FiledDescription;
 
         public NodeInputAttribute(string filedDescription = "")
         {
-            FiledDescription = filedDescription;
+            m_FiledDescription = filedDescription;
         }
     }
 }

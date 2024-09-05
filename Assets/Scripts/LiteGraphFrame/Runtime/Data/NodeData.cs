@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using LitJson;
 
 namespace LiteGraphFrame
 {
@@ -14,24 +13,70 @@ namespace LiteGraphFrame
 
     public abstract class NodeRuntime
     {
-        public string MyGUID;
-        public GraphRuntime Graph;
-        public List<PortRuntime> InputPortList;
-        public List<PortRuntime> OutputPortList;
-        public List<PortRuntime> InputFieldPortList;
-        public List<PortRuntime> OutputFieldPortList;
-        public List<PortRuntime> InputFlowPortList;
-        public List<PortRuntime> OutputFlowPortList;
+        private string m_GUID;
+        public string MyGUID => m_GUID;
+
+        private List<PortRuntime> m_InputPortList;
+        private List<PortRuntime> m_OutputPortList;
+        private List<PortRuntime> m_InputFieldPortList;
+        private List<PortRuntime> m_OutputFieldPortList;
+        private List<PortRuntime> m_InputFlowPortList;
+        protected List<PortRuntime> m_OutputFlowPortList;
+
+        public IEnumerable<PortRuntime> InputPortList => m_InputPortList;
+        public IEnumerable<PortRuntime> OutputPortList => m_OutputPortList;
         private bool m_IsExecuted;
+
+        public void InitGuid(string guid)
+        {
+            m_GUID = guid;
+        }
+
+        public void InitPorts(List<PortRuntime> portList) 
+        {
+            m_InputPortList = new List<PortRuntime>();
+            m_OutputPortList = new List<PortRuntime>();
+            m_InputFieldPortList = new List<PortRuntime>();
+            m_OutputFieldPortList = new List<PortRuntime>();
+            m_InputFlowPortList = new List<PortRuntime>();
+            m_OutputFlowPortList = new List<PortRuntime>();
+            foreach (var port in portList)
+            {
+                if (port.IsInputPort)
+                {
+                    m_InputPortList.Add(port);
+                    if (port.PortType == EPortType.Field)
+                    {
+                        m_InputFieldPortList.Add(port);
+                    }
+                    else
+                    {
+                        m_InputFlowPortList.Add(port);
+                    }
+                }
+                else
+                {
+                    m_OutputPortList.Add(port);
+                    if (port.PortType == EPortType.Field)
+                    {
+                        m_OutputFieldPortList.Add(port);
+                    }
+                    else
+                    {
+                        m_OutputFlowPortList.Add(port);
+                    }
+                }
+            }
+        }
 
         public NodeRuntime()
         {
-            InputPortList = new List<PortRuntime>();
-            OutputPortList = new List<PortRuntime>();
-            InputFieldPortList = new List<PortRuntime>();
-            OutputFieldPortList = new List<PortRuntime>();
-            InputFlowPortList = new List<PortRuntime>();
-            OutputFlowPortList = new List<PortRuntime>();
+            m_InputPortList = new List<PortRuntime>();
+            m_OutputPortList = new List<PortRuntime>();
+            m_InputFieldPortList = new List<PortRuntime>();
+            m_OutputFieldPortList = new List<PortRuntime>();
+            m_InputFlowPortList = new List<PortRuntime>();
+            m_OutputFlowPortList = new List<PortRuntime>();
         }
 
         public virtual object GetValue(string fieldName)
@@ -56,16 +101,15 @@ namespace LiteGraphFrame
 
         public virtual NodeRuntime GetNextExecuteNode()
         {
-            if (OutputFlowPortList.Count == 0)
+            if (m_OutputFlowPortList.Count == 0)
             {
                 return null;
             }
-            var connectedPort = OutputFlowPortList[0].ConnectedPort;
-            if (connectedPort == null)
+            foreach(var edge in m_OutputFlowPortList[0].Edges) 
             {
-                return null;
+                return edge.InputPort.Node;
             }
-            return connectedPort.Node;
+            return null;
         }
 
         public void Reset()
@@ -87,11 +131,11 @@ namespace LiteGraphFrame
             m_IsExecuted = true;
 
             // step1.递归先去执行上一个节点
-            foreach(var port in InputFieldPortList) 
+            foreach(var port in m_InputFieldPortList) 
             {
-                if (port.ConnectedPort != null)
+                foreach(var edge in port.Edges)
                 {
-                    port.ConnectedPort.Node.Execute();
+                    edge.OutputPort.Node.Execute();
                 }
                 // step2.根据输入端口更新节点数据
                 SetValue(port.FieldName, port.FieldValue);
@@ -110,26 +154,15 @@ namespace LiteGraphFrame
 
         protected void UpdateOutputFieldPorts()
         {
-            foreach (var port in OutputFieldPortList)
+            foreach (var port in m_OutputFieldPortList)
             {
-                if (port.ConnectedPort == null)
+                port.UpdateFieldValue(GetValue(port.FieldName));
+                foreach(var edge in port.Edges)
                 {
-                    continue;
-                }
-                var fieldValue = GetValue(port.FieldName);
-                port.FieldValue = fieldValue;
-                if (string.IsNullOrEmpty(port.TargetTypeName))
-                {
-                    port.ConnectedPort.FieldValue = fieldValue;
-                }
-                else
-                {
-                    // 基本类型转化
-                    port.ConnectedPort.FieldValue = ValuePraseUtil.ToObject(port.TargetTypeName, ValuePraseUtil.ToString(port.SourceTypeName, fieldValue));
+                    edge.InputPort.UpdateFieldValue(port.FieldValue, connectedPort: port);
                 }
             }
         }
-
     }
 
 }

@@ -4,7 +4,7 @@ namespace LiteGraphFrame
     {
         public FunctionNodeData() : base()
         {
-            NodeType = ENodeType.Function;
+            m_NodeType = ENodeType.Function;
         }
 
         // 功能节点有一个输入流程节点、一个输出流程节点、n个输入数据节点

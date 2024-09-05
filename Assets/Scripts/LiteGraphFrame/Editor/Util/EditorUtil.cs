@@ -37,8 +37,7 @@ namespace LiteGraphFrame
     {
         public override void Action(int instanceId, string pathName, string resourceFile)
         {
-            var graphData = new GraphData();
-            graphData.Initlization(pathName);
+            var graphData = new GraphData(pathName);
             LiteGraphFileUtil.WriteToDisk(pathName, graphData.Serialize());
             AssetDatabase.Refresh();
             var obj = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(pathName);

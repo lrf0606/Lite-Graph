@@ -1,6 +1,7 @@
 using LitJson;
 using System.Collections.Generic;
 using System.IO;
+
 namespace LiteGraphFrame
 {
     public class GraphRuntime
@@ -22,7 +23,7 @@ namespace LiteGraphFrame
         {
             var fileData = File.ReadAllText(assetPath);
             var jsonData = JsonMapper.ToObject(fileData);
-            Dictionary<string, PortRuntime> portDict = new Dictionary<string, PortRuntime>();
+            var portDict = new Dictionary<string, PortRuntime>();
             if (jsonData.ContainsKey("Nodes"))
             {
                 foreach (JsonData nodeJsonData in jsonData["Nodes"])
@@ -31,78 +32,38 @@ namespace LiteGraphFrame
                     string classType = (string)nodeJsonData["ClassType"];
                     ENodeType nodeType = (ENodeType)(int)nodeJsonData["NodeType"];
                     var node = LiteGraphNodeFactory.CreateNodeRumtime(classType);
-                    node.Graph = this;
-                    node.MyGUID = nodeGUID;
+                    node.InitGuid(nodeGUID);
                     m_NodeDict[nodeGUID] = node;
                     if (nodeType == ENodeType.Event)
                     {
                         m_EventDict[node.GetEventId()] = node;
                     }
-                    if (nodeJsonData.ContainsKey("Ports"))
+                    var portList = new List<PortRuntime>();
+                    foreach (JsonData portJsonData in nodeJsonData["Ports"])
                     {
-                        foreach(JsonData portJsonData in nodeJsonData["Ports"])
+                        var port = new PortRuntime(node, (EPortType)(int)portJsonData["PortType"], (bool)portJsonData["IsInputPort"]);
+                        if (port.PortType == EPortType.Field)
                         {
-                            var port = new PortRuntime();
-                            port.Node = node;
-                            port.PortType = (EPortType)(int)portJsonData["PortType"];
-                            if (port.PortType == EPortType.Field)
-                            {
-                                port.FieldName = (string)portJsonData["FieldName"];
-                                string sourceTypeName = (string)portJsonData["SourceTypeName"];
-                                string targetTypeName = (string)portJsonData["TargetTypeName"];        
-                                string fieldValue = (string)portJsonData["FieldValue"];
-                                port.FieldValue = ValuePraseUtil.ToObject(sourceTypeName, fieldValue);
-                                port.SourceTypeName = sourceTypeName;
-                                port.TargetTypeName = targetTypeName;
-                            }
-                            var isInputPort = (bool)portJsonData["IsInputPort"];
-                            if (isInputPort)
-                            {
-                                node.InputPortList.Add(port);
-                                if (port.PortType == EPortType.Field)
-                                {
-                                    node.InputFieldPortList.Add(port);
-                                }
-                                else
-                                {
-                                    node.InputFlowPortList.Add(port);
-                                }                            }
-                            else
-                            {
-                                node.OutputPortList.Add(port);
-                                if (port.PortType == EPortType.Field)
-                                {
-                                    node.OutputFieldPortList.Add(port);
-                                }
-                                else
-                                {
-                                    node.OutputFlowPortList.Add(port);
-                                }
-                            }
-                            portDict[(string)portJsonData["GUID"]] = port;
+                            string fieldTypeName = (string)portJsonData["FieldTypeName"];
+                            port.InitFieldInfo((string)portJsonData["FieldName"], ValuePraseUtil.ToObject(fieldTypeName, (string)portJsonData["FieldValue"]), fieldTypeName);
                         }
+                        portList.Add(port);
+                        portDict[(string)portJsonData["GUID"]] = port;
                     }
+                    node.InitPorts(portList);
                 }
             }
             if (jsonData.ContainsKey("Edges"))
             {
-                foreach (var nodeGUID in jsonData["Edges"].Keys)
+                var edgesJsonData = jsonData["Edges"];
+                foreach (var edgeGUID in edgesJsonData.Keys)
                 {
-                    if (!m_NodeDict.ContainsKey(nodeGUID))
-                    {
-                        continue;
-                    }
-                    var portConnectionJsonData = jsonData["Edges"][nodeGUID];
-                    foreach (var portGUID in portConnectionJsonData.Keys)
-                    {
-                        if (portDict.TryGetValue(portGUID, out var port))
-                        {
-                            if (portDict.TryGetValue((string)portConnectionJsonData[portGUID][1], out var connectedPort))
-                            {
-                                port.ConnectedPort = connectedPort;
-                            }     
-                        }
-                    }
+                    var connectionJson = edgesJsonData[edgeGUID];
+                    var outputPort = portDict[(string)connectionJson[1]];
+                    var inputPort = portDict[(string)connectionJson[3]];
+                    var edge = new EdgeRuntime(outputPort, inputPort);
+                    outputPort.AddEdge(edge);
+                    inputPort.AddEdge(edge);
                 }
             }
         }

@@ -4,129 +4,123 @@ using System.Collections.Generic;
 
 namespace LiteGraphFrame
 {
-    class GraphData : IJsonable
+    sealed class GraphData : IJsonable
     {
-        public string AssetPath { get; private set; }
+        private string m_AssetPath;
 
-        public Dictionary<string, NodeDataBase> NodeDict { get; private set; }
-        public Dictionary<string, Dictionary<string, ConnectionInfo>> NodeConnectionDict { get; private set; }
-        public Dictionary<int, NodeDataBase> EventNodeDict { get; private set; }
+        private Dictionary<string, NodeDataBase> m_NodeDict;
+        private Dictionary<int, NodeDataBase> m_EventNodeDict;
 
-        public GraphData()
+        private List<NodeDataBase> m_AddedNodes;
+        private List<NodeDataBase> m_RemovedNodes;
+        private List<EdgeData> m_AddedEdges;
+        private List<EdgeData> m_RemovedEdges;
+
+        public IEnumerable<NodeDataBase> AllNodes => m_NodeDict.Values;
+        public IEnumerable<NodeDataBase> AddedNodes => m_AddedNodes;
+        public IEnumerable<NodeDataBase> RemovedNodes => m_RemovedNodes;
+        public IEnumerable<EdgeData> AddedEdges => m_AddedEdges;
+        public IEnumerable<EdgeData> RemovedEdges => m_RemovedEdges;
+
+        public GraphData(string assetPath)
         {
-            NodeDict = new Dictionary<string, NodeDataBase>();
-            NodeConnectionDict = new Dictionary<string, Dictionary<string, ConnectionInfo>>();
-            EventNodeDict = new Dictionary<int, NodeDataBase>();
+            m_AssetPath = assetPath;
+            m_NodeDict = new Dictionary<string, NodeDataBase>();
+            m_EventNodeDict = new Dictionary<int, NodeDataBase>();
+            m_AddedNodes = new List<NodeDataBase>();
+            m_RemovedNodes = new List<NodeDataBase>();
+            m_AddedEdges = new List<EdgeData>();
+            m_RemovedEdges = new List<EdgeData>();
+        }
+        public void ClearChanges()
+        {
+            m_AddedNodes.Clear();
+            m_RemovedNodes.Clear();
+            m_AddedEdges.Clear();
+            m_RemovedEdges.Clear();
         }
 
-        public void Initlization(string assetPath)
-        {
-            AssetPath = assetPath;
-        }
-      
-        public bool AddNode(NodeDataBase nodeData)
+        public bool AddNode(NodeDataBase nodeData, out string failReason)
         {
             // 相同事件节点只能出现一次
             if (nodeData is EventNodeData eventNodeData)
             {
-                if (EventNodeDict.ContainsKey(eventNodeData.GetEventId()))
+                if (m_EventNodeDict.ContainsKey(eventNodeData.GetEventId()))
                 {
+                    failReason = $"事件节点一张视图[{nodeData}]只能出现一次";
                     return false;
                 }
                 else
                 {
-                    EventNodeDict[eventNodeData.GetEventId()] = nodeData;
+                    m_EventNodeDict[eventNodeData.GetEventId()] = nodeData;
                 }
             }
-            NodeDict[nodeData.MyGUID] = nodeData;
-            NodeConnectionDict[nodeData.MyGUID] = new Dictionary<string, ConnectionInfo>();
+            m_NodeDict[nodeData.MyGUID] = nodeData;
+            m_AddedNodes.Add(nodeData);
+            failReason = "";
             return true;
         }
 
         public void RemoveNode(NodeDataBase nodeData)
         {
-            NodeDict.Remove(nodeData.MyGUID);
+            m_NodeDict.Remove(nodeData.MyGUID);
             if (nodeData is EventNodeData eventNodeData)
             {
-                EventNodeDict.Remove(eventNodeData.GetEventId());
+                m_EventNodeDict.Remove(eventNodeData.GetEventId());
             }
-            NodeConnectionDict.Remove(nodeData.MyGUID);
+            m_RemovedNodes.Add(nodeData);
         }
 
-        public void ConnectNode(NodeDataBase fromNodeData, PortDataBase fromPortData, NodeDataBase toNodeData, PortDataBase toPortData)
+        public void ConnectNode(PortDataBase outputPort, PortDataBase inputPort)
         {
-            var connectionInfo1 = new ConnectionInfo(toNodeData, toPortData);
-            NodeConnectionDict[fromNodeData.MyGUID][fromPortData.MyGUID] = connectionInfo1;
-            fromNodeData.PortConnectionDict[fromPortData.MyGUID] = connectionInfo1;
-            fromPortData.ConnectionInfo = connectionInfo1;
-            fromPortData.OnConnectedChange(true, toPortData);
-
-            var connectionInfo2 = new ConnectionInfo(fromNodeData, fromPortData);
-            NodeConnectionDict[toNodeData.MyGUID][toPortData.MyGUID] = connectionInfo2;
-            toNodeData.PortConnectionDict[toPortData.MyGUID] = connectionInfo2;
-            toPortData.ConnectionInfo = connectionInfo2;
-            toPortData.OnConnectedChange(true, fromPortData);
+            var edgeData = new EdgeData();
+            edgeData.Initlization(outputPort, inputPort);
+            m_AddedEdges.Add(edgeData);
+            outputPort.OnConnectedChange(true, inputPort, edgeData);
+            inputPort.OnConnectedChange(true, outputPort, edgeData);
         }
 
-        public void DisconnectNode(NodeDataBase fromNodeData, PortDataBase fromPortData, NodeDataBase toNodeData, PortDataBase toPortData)
+        public void DisconnectNode(PortDataBase outputPort, PortDataBase inputPort)
         {
-            NodeConnectionDict[fromNodeData.MyGUID].Remove(fromPortData.MyGUID);
-            fromNodeData.PortConnectionDict.Remove(fromPortData.MyGUID);
-            fromPortData.ConnectionInfo.Clear();
-            fromPortData.OnConnectedChange(false, toPortData);
-
-            NodeConnectionDict[toNodeData.MyGUID].Remove(toPortData.MyGUID);
-            toNodeData.PortConnectionDict.Remove(toPortData.MyGUID);
-            toPortData.ConnectionInfo.Clear();
-            toPortData.OnConnectedChange(false, fromPortData);
-        }
-
-        public void UpdateNodePosition(NodeDataBase nodeData, float x, float y)
-        {
-            nodeData.Position[0] = x;
-            nodeData.Position[1] = y;
+            var edgeData = outputPort.GetEdgeDataByConnectedPort(inputPort);
+            m_RemovedEdges.Add(edgeData);
+            outputPort.OnConnectedChange(false, inputPort, edgeData);
+            inputPort.OnConnectedChange(false, outputPort, edgeData);
         }
 
         public override JsonData Encoder()
         {
             var graphData = new JsonData();
-            graphData["Path"] = AssetPath;
-            if (NodeDict.Count > 0)
+            graphData["Path"] = m_AssetPath;
+            var edgeSet = new HashSet<EdgeData>();
+            if (m_NodeDict.Count > 0)
             {
                 var nodeListJsonData = new JsonData();
                 graphData["Nodes"] = nodeListJsonData;
-                foreach (var nodeData in NodeDict.Values)
+                foreach (var nodeData in m_NodeDict.Values)
                 {
                     nodeListJsonData.Add(nodeData.Encoder());
-                }
-            }
-            if (NodeConnectionDict.Count > 0)
-            {
-                bool hasEdge = false;
-                var nodeConnectionJsonData = new JsonData();
-                foreach (var kv1 in NodeConnectionDict)
-                {
-                    string nodeGUID = kv1.Key;
-                    var portConnectionDict = kv1.Value;
-                    if (portConnectionDict.Count > 0)
+                    foreach (var portData in nodeData.PortList)
                     {
-                        var portConnectionsJsonData = new JsonData();
-                        foreach(var kv2 in portConnectionDict)
+                        foreach (var edgeData in portData.Edges)
                         {
-                            string portGUID = kv2.Key;
-                            var connectionInfo = kv2.Value;
-                            var connectionJsonData = new JsonData();
-                            connectionJsonData.Add(connectionInfo.NodeData.MyGUID);
-                            connectionJsonData.Add(connectionInfo.PortData.MyGUID);
-                            portConnectionsJsonData[portGUID] = connectionJsonData;
-                            hasEdge = true;
+                            edgeSet.Add(edgeData);
                         }
-                        nodeConnectionJsonData[nodeGUID] = portConnectionsJsonData;
                     }
                 }
-                if (hasEdge)
+            }
+            if (edgeSet.Count > 0)
+            {
+                var edgesJson = new JsonData();
+                graphData["Edges"] = edgesJson;
+                foreach (var edgeData in edgeSet)
                 {
-                    graphData["Edges"] = nodeConnectionJsonData;
+                    var connectionJson = new JsonData();
+                    connectionJson.Add(edgeData.OutputPortData.NodeData.MyGUID);
+                    connectionJson.Add(edgeData.OutputPortData.MyGUID);
+                    connectionJson.Add(edgeData.InputPortData.NodeData.MyGUID);
+                    connectionJson.Add(edgeData.InputPortData.MyGUID);
+                    edgesJson[edgeData.MyGUID] = connectionJson;
                 }
             }
             return graphData;
@@ -137,7 +131,7 @@ namespace LiteGraphFrame
             if (jsonData.ContainsKey("Nodes"))
             {
                 var nodeListJsonData = jsonData["Nodes"];
-                foreach(JsonData nodeJsonData in nodeListJsonData)
+                foreach (JsonData nodeJsonData in nodeListJsonData)
                 {
                     var classType = $"{this.GetType().Namespace}.{(string)nodeJsonData["ClassType"]}";
                     var type = Type.GetType(classType);
@@ -146,29 +140,22 @@ namespace LiteGraphFrame
                         continue;
                     }
                     var nodeData = (NodeDataBase)Activator.CreateInstance(type);
+                    nodeData.Initliazation(isDecoded: true);
                     nodeData.Decoder(nodeJsonData);
-                    AddNode(nodeData);
+                    AddNode(nodeData, out _);
                 }
             }
             if (jsonData.ContainsKey("Edges"))
             {
-                var nodeConnectionJsonData = jsonData["Edges"];
-                foreach(var nodeGUID in nodeConnectionJsonData.Keys)
+                var edgesJsonData = jsonData["Edges"];
+                foreach (var edgeGUID in edgesJsonData.Keys)
                 {
-                    if (NodeDict.TryGetValue(nodeGUID, out var fromNodeData))
-                    {
-                        var portConnectionJsonData = nodeConnectionJsonData[nodeGUID];
-                        foreach (var portGUID in portConnectionJsonData.Keys)
-                        {
-                            var connectionJsonData = portConnectionJsonData[portGUID];
-                            var targetNodeGUID = (string)connectionJsonData[0];
-                            var targetPortGUID = (string)connectionJsonData[1];
-                            var fromPortData = fromNodeData.PortDict[portGUID];
-                            var toNodeData = NodeDict[targetNodeGUID];
-                            var toPortData = toNodeData.PortDict[targetPortGUID];
-                            ConnectNode(fromNodeData, fromPortData, toNodeData, toPortData);
-                        }
-                    }
+                    var connectionJson = edgesJsonData[edgeGUID];
+                    var outputNodeGUID = (string)connectionJson[0];
+                    var outputPortGUID = (string)connectionJson[1];
+                    var inputNodeGUID = (string)connectionJson[2];
+                    var inputPortGUID = (string)connectionJson[3];
+                    ConnectNode(m_NodeDict[outputNodeGUID].GetPortByGUID(outputPortGUID), m_NodeDict[inputNodeGUID].GetPortByGUID(inputPortGUID));
                 }
             }
         }

@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using UnityEditor;
+using UnityEngine;
 
 namespace LiteGraphFrame
 {
@@ -32,7 +33,7 @@ namespace LiteGraphFrame
                             return false;
                         }
                     }
-                    UnityEngine.Debug.LogException(e);
+                    Debug.LogException(e);
                     if (EditorUtility.DisplayDialog("Exception While Saving", e.ToString(), "Retry", "Cancel"))
                     {
                         continue;

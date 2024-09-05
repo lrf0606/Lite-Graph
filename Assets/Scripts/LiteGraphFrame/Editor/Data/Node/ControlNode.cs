@@ -4,7 +4,7 @@ namespace LiteGraphFrame
     {
         public ControlNodeData() : base()
         {
-            NodeType = ENodeType.Control;
+            m_NodeType = ENodeType.Control;
         }
     }
 }

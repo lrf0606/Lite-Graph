@@ -8,7 +8,11 @@ namespace LiteGraphFrame
 {
     class LiteGraphSearchWindow : ScriptableObject, ISearchWindowProvider
     {
-        public Func<SearchTreeEntry, SearchWindowContext, bool> OnSelectEntryCallback;
+        private PortDataBase m_ToConnectPort;
+        private Func<SearchTreeEntry, SearchWindowContext, bool> m_OnSelectEntryCallback;
+
+        public PortDataBase ToConnectPort { get { return m_ToConnectPort; } set { m_ToConnectPort = value; } }
+        public Func<SearchTreeEntry, SearchWindowContext, bool> OnSelectEntryCallback { get { return m_OnSelectEntryCallback; } set { m_OnSelectEntryCallback = value; } }
 
         List<SearchTreeEntry> ISearchWindowProvider.CreateSearchTree(SearchWindowContext context)
         {
@@ -25,7 +29,20 @@ namespace LiteGraphFrame
             {
                 if (type.IsClass && !type.IsAbstract && type.IsSubclassOf(baseType))
                 {
-                    types.Add(type);
+                    if (m_ToConnectPort == null)
+                    {
+                        types.Add(type);
+                    }
+                    else
+                    {
+                        // 根据ToConnectPort进行筛选
+                        var tempNodeData = (NodeDataBase)Activator.CreateInstance((Type)type);
+                        tempNodeData.Initliazation();
+                        if (FindNeedConnectPort(tempNodeData) != null)
+                        {
+                            types.Add(type);
+                        }
+                    }
                 }
             }
 
@@ -50,7 +67,10 @@ namespace LiteGraphFrame
 
             foreach (var kv in titleDict)
             {
-                var directory = kv.Key;
+                if (kv.Value.Count == 0)
+                {
+                    continue;
+                }
                 var group = new SearchTreeGroupEntry(new GUIContent(kv.Key), 1);
                 searchTreeEntries.Add(group);
                 foreach (var type in kv.Value)
@@ -68,11 +88,38 @@ namespace LiteGraphFrame
         // 选中某项
         bool ISearchWindowProvider.OnSelectEntry(SearchTreeEntry searchTreeEntry, SearchWindowContext context)
         {
-            if (OnSelectEntryCallback != null)
+            if (m_OnSelectEntryCallback == null)
             {
-                return OnSelectEntryCallback.Invoke(searchTreeEntry, context);
+                return false;
             }
-            return true;
+            return m_OnSelectEntryCallback.Invoke(searchTreeEntry, context);
+        }
+
+        // 获取第一个能和ToConnectPort连接的端口
+        public PortDataBase FindNeedConnectPort(NodeDataBase nodeData)
+        {
+            if (m_ToConnectPort == null || nodeData == null)
+            {
+                return null;
+            }
+            foreach (var portData in nodeData.PortList)
+            {
+                if (m_ToConnectPort.IsInputPort)
+                {
+                    if (portData.CanConnectTo(m_ToConnectPort))
+                    {
+                        return portData;
+                    }
+                }
+                else
+                {
+                    if (m_ToConnectPort.CanConnectTo(portData))
+                    {
+                        return portData;
+                    }
+                }
+            }
+            return null;
         }
     }
 }

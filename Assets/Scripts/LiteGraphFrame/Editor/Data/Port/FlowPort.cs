@@ -6,7 +6,7 @@ namespace LiteGraphFrame
     {
         public FlowPortData() : base() 
         {
-            PortType = EPortType.Flow;
+            m_PortType = EPortType.Flow;
         }
 
         public override bool CanConnectTo(PortDataBase otherPortData)
@@ -21,11 +21,6 @@ namespace LiteGraphFrame
                 return false;
             }
             return true;
-        }
-
-        public override void OnConnectedChange(bool isConnected, PortDataBase otherPortData)
-        {
-            
         }
     }
 }

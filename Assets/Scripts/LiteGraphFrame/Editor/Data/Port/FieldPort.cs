@@ -6,25 +6,27 @@ namespace LiteGraphFrame
 {
     class FieldPortData : PortDataBase
     {
-        public string FieldName { get; set; }
-        public string SourceTypeName { get; set; } // 端口原本数据类型
-        public string TargetTypeName { get; set; } // 和其他端口连接后需要转化为的数据类型
-        public object FieldValue { get; set; }
-        public string FieldDescription { get; set; }
-        public object RuntimeFieldValue { get; set; } // 不需要序列化
+        private string m_FieldName;
+        private string m_FieldTypeName;
+        private object m_FieldValue;
+        private string m_FieldDescription;
+
+        public string FieldName => m_FieldName;
+        public string FieldTypeName => m_FieldTypeName;
+        public object FieldValue { get { return m_FieldValue; } set { m_FieldValue = value; } }
+        public string FieldDescription => m_FieldDescription;
 
         public FieldPortData() : base()
         {
-            PortType = EPortType.Field;
+            m_PortType = EPortType.Field;
         }
 
         public void InitFieldIfno(FieldInfo fieldInfo, string fieldDescription)
         {
-            FieldName = fieldInfo.Name;
-            SourceTypeName = fieldInfo.FieldType.Name;
-            TargetTypeName = "";
-            FieldValue = fieldInfo.GetValue(OwnerNodeData);
-            FieldDescription = fieldDescription;
+            m_FieldName = fieldInfo.Name;
+            m_FieldTypeName = fieldInfo.FieldType.Name;
+            m_FieldValue = fieldInfo.GetValue(NodeData);
+            m_FieldDescription = fieldDescription;
         }
 
         public override bool CanConnectTo(PortDataBase otherPortData)
@@ -39,49 +41,31 @@ namespace LiteGraphFrame
                 return false;
             }
             // 数据端口部分数据类型可以转化
-            var otherPortSourceTypeName = ((FieldPortData)otherPortData).SourceTypeName;
-            if (SourceTypeName != otherPortSourceTypeName && !FieldPortUtil.CheckFieldCanTransform(SourceTypeName, otherPortSourceTypeName))
+            var otherPortSourceTypeName = ((FieldPortData)otherPortData).FieldTypeName;
+            if (FieldTypeName != otherPortSourceTypeName && !FieldPortUtil.CheckFieldCanTransform(FieldTypeName, otherPortSourceTypeName))
             {
                 return false;
             }
             return true;
         }
 
-        public override void OnConnectedChange(bool isConnected, PortDataBase otherPortData)
-        {
-            if (!IsInputPort)
-            {
-                if (isConnected)
-                {
-                    TargetTypeName = ((FieldPortData)otherPortData).SourceTypeName;
-                }
-                else
-                {
-                    TargetTypeName = "";
-                }
-            }
-
-        }
-
         public override JsonData Encoder()
         {
             var jsonData = base.Encoder();
-            jsonData["FieldName"] = FieldName;
-            jsonData["SourceTypeName"] = SourceTypeName;
-            jsonData["TargetTypeName"] = TargetTypeName;
-            jsonData["FieldValue"] = ValuePraseUtil.ToString(SourceTypeName, FieldValue);
-            jsonData["FieldDescription"] = FieldDescription;
+            jsonData["FieldName"] = m_FieldName;
+            jsonData["FieldTypeName"] = m_FieldTypeName;
+            jsonData["FieldValue"] = ValuePraseUtil.ToString(m_FieldTypeName, m_FieldValue);
+            jsonData["FieldDescription"] = m_FieldDescription;
             return jsonData;
         }
 
         public override void Decoder(JsonData jsonData)
         {
             base.Decoder(jsonData);
-            FieldName = (string)jsonData["FieldName"];
-            SourceTypeName = (string)jsonData["SourceTypeName"];
-            TargetTypeName = (string)jsonData["TargetTypeName"];
-            FieldValue = ValuePraseUtil.ToObject(SourceTypeName, (string)jsonData["FieldValue"]);
-            FieldDescription = (string)jsonData["FieldDescription"];
+            m_FieldName = (string)jsonData["FieldName"];
+            m_FieldTypeName = (string)jsonData["FieldTypeName"];
+            m_FieldValue = ValuePraseUtil.ToObject(FieldTypeName, (string)jsonData["FieldValue"]);
+            m_FieldDescription = (string)jsonData["FieldDescription"];
         }
     }
 }

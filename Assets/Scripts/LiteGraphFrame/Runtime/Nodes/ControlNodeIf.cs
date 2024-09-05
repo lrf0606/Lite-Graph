@@ -31,10 +31,10 @@ namespace LiteGraphFrame
 
         public override NodeRuntime GetNextExecuteNode()
         {
-            var connectedPort = BoolValue ? OutputFlowPortList[0].ConnectedPort : OutputFlowPortList[1].ConnectedPort;
-            if (connectedPort != null)
+            var port = BoolValue ? m_OutputFlowPortList[0] : m_OutputFlowPortList[1];
+            foreach(var edge in port.Edges)
             {
-                return connectedPort.Node;
+                return edge.InputPort.Node;
             }
             return null;
         }

@@ -10,20 +10,12 @@ namespace LiteGraphFrame
     {
         [SerializeField]
         private string m_AssetGUID; // 序列化字段，保证界面重载时数据存在
-
-        public string AssetGUID
-        {
-            get { return m_AssetGUID; }
-            private set { m_AssetGUID = value; }
-        }
-
         private GraphData m_GraphData;
-
         private FunctionToolBarView m_FunctionToolBar;
-
         private NodeInspectorView m_NodeInspectorView;
-
         private LiteGraphView m_GraphView;
+
+        public string AssetGUID => m_AssetGUID;
 
         public LiteGraphEditorWindow()
         {
@@ -31,9 +23,9 @@ namespace LiteGraphFrame
 
         private void Update()
         {
-            if (m_GraphData == null && AssetGUID != null)
+            if (m_GraphData == null && m_AssetGUID != null)
             {
-                Initlization(AssetGUID);
+                Initlization(m_AssetGUID);
             }
             if (m_GraphData == null)
             {
@@ -45,7 +37,7 @@ namespace LiteGraphFrame
 
         public void Initlization(string guid)
         {
-            AssetGUID = guid;
+            m_AssetGUID = guid;
             var assetPath = AssetDatabase.GUIDToAssetPath(guid);
             if (!LiteGraphFileUtil.IsFileExist(assetPath))
             {
@@ -55,17 +47,10 @@ namespace LiteGraphFrame
             }
             string fileName = Path.GetFileName(assetPath);
             string fileData = LiteGraphFileUtil.SafeReadAllText(assetPath);
-            m_GraphData = new GraphData();
-            m_GraphData.Initlization(assetPath);
+            m_GraphData = new GraphData(assetPath);
             m_GraphData.Deserialize(fileData);
 
-            m_FunctionToolBar = new FunctionToolBarView(this)
-            {
-                SaveCallback = SaveAsset,
-                SaveAsCallback = SaveAs,
-                ShowInProjectCallback = ShowInProject,
-                GenerateNodeCallback = GenerateNode,
-            };
+            m_FunctionToolBar = new FunctionToolBarView(this, SaveAsset, SaveAs, ShowInProject, GenerateNode);
             m_FunctionToolBar.Initlization();
             this.rootVisualElement.Add(m_FunctionToolBar);
 
@@ -82,28 +67,28 @@ namespace LiteGraphFrame
 
         void SaveAsset()
         {
-            var path = AssetDatabase.GUIDToAssetPath(AssetGUID);
-            LiteGraphFileUtil.WriteToDisk(path, m_GraphData.Encoder().ToJson());
+            var path = AssetDatabase.GUIDToAssetPath(m_AssetGUID);
+            LiteGraphFileUtil.WriteToDisk(path, m_GraphData.Serialize());
             AssetDatabase.Refresh();
         }
 
         void SaveAs()
         {
-            var curPath = AssetDatabase.GUIDToAssetPath(AssetGUID);
+            var curPath = AssetDatabase.GUIDToAssetPath(m_AssetGUID);
             string directory = Path.GetDirectoryName(curPath);
             string newPath = EditorUtility.SaveFilePanel("创建蓝图文件", directory, LiteGraphEditorUtil.NewFile, LiteGraphEditorUtil.Extension);
             if (!string.IsNullOrEmpty(newPath))
             {
-                LiteGraphFileUtil.WriteToDisk(newPath, m_GraphData.Encoder().ToJson());
+                LiteGraphFileUtil.WriteToDisk(newPath, m_GraphData.Serialize());
             }
             AssetDatabase.Refresh();
         }
 
         void ShowInProject()
         {
-            if (!string.IsNullOrEmpty(AssetGUID))
+            if (!string.IsNullOrEmpty(m_AssetGUID))
             {
-                var path = AssetDatabase.GUIDToAssetPath(AssetGUID);
+                var path = AssetDatabase.GUIDToAssetPath(m_AssetGUID);
                 var asset = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(path);
                 EditorGUIUtility.PingObject(asset);
             }

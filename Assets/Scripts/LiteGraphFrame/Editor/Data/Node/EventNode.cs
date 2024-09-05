@@ -4,7 +4,7 @@ namespace LiteGraphFrame
     {
         public EventNodeData() : base()
         {
-            NodeType = ENodeType.Event;
+            m_NodeType = ENodeType.Event;
         }
 
         protected override void InitlizationPort()

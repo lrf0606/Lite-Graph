@@ -1,97 +1,62 @@
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using System.Reflection;
+using UnityEngine.UIElements;
 
 
 namespace LiteGraphFrame
 {
     class NodeView : Node
     {
-        public NodeDataBase NodeData { get; private set; }
-        public Dictionary<string, Port> PortDict { get; private set; }
+        private NodeDataBase m_NodeData;
+        private Dictionary<string, Port> m_PortDict;
+        private EdgeConnectorListener m_EdgeConnectorListener;
+        public NodeDataBase NodeData => m_NodeData;
 
-        public NodeView() { }
+        public NodeView(EdgeConnectorListener edgeConnectorListener)
+        {
+            m_EdgeConnectorListener = edgeConnectorListener;
+            m_PortDict = new Dictionary<string, Port>();
+        }
 
         public void Initlization(NodeDataBase nodeData)
         {
-            NodeData = nodeData;
-            PortDict = new Dictionary<string, Port>();
+            m_NodeData = nodeData;
             InitlizationTitle();
-            InitlizationPort();
+            InitlizationPorts();
         }
 
         void InitlizationTitle()
         {
-            if (string.IsNullOrEmpty(NodeData.Name))
+            if (string.IsNullOrEmpty(m_NodeData.Name))
             {
-
-                var titleAttribute = NodeData.GetType().GetCustomAttribute<NodeRegisterAttribute>();
+                var titleAttribute = m_NodeData.GetType().GetCustomAttribute<NodeRegisterAttribute>();
                 this.title = titleAttribute.Title;
             }
             else
             {
-                this.title = NodeData.Name;
+                this.title = m_NodeData.Name;
             }
         }
 
-        void InitlizationPort()
+        void InitlizationPorts()
         {
-            foreach (var portData in NodeData.PortList)
+            foreach (var portData in m_NodeData.PortList)
             {
-                Direction direction;
-                if (portData.IsInputPort)
-                {
-                    direction = Direction.Input;
-                }
-                else
-                {
-                    direction = Direction.Output;
-                }
-                var portView = InstantiatePort(Orientation.Horizontal, direction, Port.Capacity.Single, portData.GetType());
-                if (portData is FieldPortData valuePortData)
-                {
-                    if (string.IsNullOrEmpty(valuePortData.FieldDescription))
-                    {
-                        portView.portName = valuePortData.Name;
-                    }
-                    else
-                    {
-                        portView.portName = $"{valuePortData.Name}({valuePortData.FieldDescription})";
-                    }
-                }
-                else
-                {
-                    portView.portName = portData.Name;
-                }
-                portView.userData = portData;
+                var portView = PortView.Create(portData, m_EdgeConnectorListener) ;
                 if (portData.IsInputPort)
                 {
                     inputContainer.Add(portView);
-                    if (portData is FieldPortData fieldPortData)
-                    {
-                        var fieldInputView = new PortFieldInputView(fieldPortData);
-                        portView.Add(fieldInputView);
-                    }
                 }
                 else
                 {
                     outputContainer.Add(portView); 
                 }
-                PortDict[portData.MyGUID] = portView;
-            }
-        }
-        public void OnNodeConnected(Port port)
-        {
-            foreach(var view in port.Children())
-            {
-                if (view is PortFieldInputView fieldInputView)
-                {
-                    fieldInputView.RefreshVisible();
-                }
+                m_PortDict[portData.MyGUID] = portView;
             }
         }
 
-        public void OnNodeDisconnected(Port port)
+        public void OnNodeViewConnectedChange(bool isConnected, Port port)
         {
             foreach (var view in port.Children())
             {
@@ -101,5 +66,18 @@ namespace LiteGraphFrame
                 }
             }
         }
+        public Port GetPortViewByGUID(string guid)
+        {
+            m_PortDict.TryGetValue(guid, out var portView);
+            return portView;
+        }
+
+        public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
+        {
+            // 暂时不需要"Disconnect all"功能，需要的话在GraphView里重新实现
+            // base.BuildContextualMenu(evt);
+            return;
+        }
+
     }
 }

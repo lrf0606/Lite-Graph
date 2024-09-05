@@ -55,7 +55,6 @@ namespace LiteGraphFrame
             R6 = A >= B;
         }
         // === Execute Logic End ===
-
     }
 }
 // === LiteGraphFrame Code Generate End ===

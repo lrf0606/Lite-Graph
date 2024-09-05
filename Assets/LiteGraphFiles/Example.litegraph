@@ -4,17 +4,17 @@
     "Nodes" : [
         {
             "ClassType" : "EventNodeEventTest1",
-            "GUID"      : "78c3c0dbfe694eb6b29a89a1d73430b7",
+            "GUID"      : "629cee9d1dec4dcf9d9a81ba4d12cae1",
             "Name"      : "",
             "NodeType"  : 0,
             "Position"  : [
-                66.3999938964844,
-                274.399993896484
+                1041.59997558594,
+                -163.199996948242
             ],
             "Ports"     : [
                 {
                     "ClassType" : "FlowPortData",
-                    "GUID"      : "d093c8853ddb4d24a6a5279f11908e7f",
+                    "GUID"      : "191a937879d84934b99ee7d22c7aec93",
                     "IsInputPort" : false,
                     "Name"        : "Out",
                     "PortType"    : 0
@@ -23,22 +23,641 @@
         },
         {
             "ClassType" : "EventNodeEventTest2",
-            "GUID"      : "31e363b267ab450dba2fd75610a584db",
+            "GUID"      : "f7580499849c4c629e752c626a4e9e0e",
             "Name"      : "",
             "NodeType"  : 0,
             "Position"  : [
-                46.4000015258789,
-                412.0
+                989.600036621094,
+                160.0
             ],
             "Ports"     : [
                 {
                     "ClassType" : "FlowPortData",
-                    "GUID"      : "8efe4c4a7c8e4e39a7c87276a37cf5f5",
+                    "GUID"      : "326b4e9afbff4985acaa0fd69cb7f866",
                     "IsInputPort" : false,
                     "Name"        : "Out",
                     "PortType"    : 0
                 }
             ]
+        },
+        {
+            "ClassType" : "FunctionNodeLog",
+            "GUID"      : "afbce8879d7d4176b5519fe643836c28",
+            "Name"      : "",
+            "NodeType"  : 1,
+            "Position"  : [
+                1330.39990234375,
+                -163.199996948242
+            ],
+            "Ports"     : [
+                {
+                    "ClassType" : "FlowPortData",
+                    "GUID"      : "e7ccc4526ec64778971f953b36338c3f",
+                    "IsInputPort" : true,
+                    "Name"        : "In",
+                    "PortType"    : 0
+                },
+                {
+                    "ClassType" : "FlowPortData",
+                    "GUID"      : "2cef41716b014e64852f7bf2d946f1da",
+                    "IsInputPort" : false,
+                    "Name"        : "Out",
+                    "PortType"    : 0
+                },
+                {
+                    "ClassType" : "FieldPortData",
+                    "GUID"      : "3aca578ebe1644f7939e41f2d30f12dc",
+                    "IsInputPort" : true,
+                    "Name"        : "LogMsg",
+                    "PortType"    : 1,
+                    "FieldName"   : "LogMsg",
+                    "FieldTypeName" : "String",
+                    "FieldValue"    : "event1 called",
+                    "FieldDescription" : ""
+                }
+            ]
+        },
+        {
+            "ClassType" : "ControlNodeForLoop",
+            "GUID"      : "37744eb7da3d4d948731c300fe153ea2",
+            "Name"      : "",
+            "NodeType"  : 3,
+            "Position"  : [
+                1476.79992675781,
+                236.799987792969
+            ],
+            "Ports"     : [
+                {
+                    "ClassType" : "FlowPortData",
+                    "GUID"      : "f8fb9b45667f4527b3db56c9ee040e94",
+                    "IsInputPort" : true,
+                    "Name"        : "In",
+                    "PortType"    : 0
+                },
+                {
+                    "ClassType" : "FlowPortData",
+                    "GUID"      : "f0ffc5a03d164033a11a572771cd2762",
+                    "IsInputPort" : false,
+                    "Name"        : "Exit",
+                    "PortType"    : 0
+                },
+                {
+                    "ClassType" : "FlowPortData",
+                    "GUID"      : "ee53a7a559dd4ff38cffae3c717b5748",
+                    "IsInputPort" : false,
+                    "Name"        : "Body",
+                    "PortType"    : 0
+                },
+                {
+                    "ClassType" : "FieldPortData",
+                    "GUID"      : "26987da40c6d4a32b01efc935b7597c5",
+                    "IsInputPort" : true,
+                    "Name"        : "First",
+                    "PortType"    : 1,
+                    "FieldName"   : "First",
+                    "FieldTypeName" : "Int32",
+                    "FieldValue"    : "0",
+                    "FieldDescription" : ""
+                },
+                {
+                    "ClassType" : "FieldPortData",
+                    "GUID"      : "31ffa7bd891e474da4d21ddfc040b1c7",
+                    "IsInputPort" : true,
+                    "Name"        : "Last",
+                    "PortType"    : 1,
+                    "FieldName"   : "Last",
+                    "FieldTypeName" : "Int32",
+                    "FieldValue"    : "10",
+                    "FieldDescription" : ""
+                },
+                {
+                    "ClassType" : "FieldPortData",
+                    "GUID"      : "7ed198d885c64e3296b50c2a8c152632",
+                    "IsInputPort" : true,
+                    "Name"        : "Step",
+                    "PortType"    : 1,
+                    "FieldName"   : "Step",
+                    "FieldTypeName" : "Int32",
+                    "FieldValue"    : "2",
+                    "FieldDescription" : ""
+                },
+                {
+                    "ClassType" : "FieldPortData",
+                    "GUID"      : "658eee1133934a37b8d541102c561bfa",
+                    "IsInputPort" : false,
+                    "Name"        : "Index",
+                    "PortType"    : 1,
+                    "FieldName"   : "Index",
+                    "FieldTypeName" : "Int32",
+                    "FieldValue"    : "0",
+                    "FieldDescription" : ""
+                }
+            ]
+        },
+        {
+            "ClassType" : "FunctionNodeLog",
+            "GUID"      : "f88c31d03b524755b46326b8e1b74033",
+            "Name"      : "",
+            "NodeType"  : 1,
+            "Position"  : [
+                1733.59997558594,
+                177.600006103516
+            ],
+            "Ports"     : [
+                {
+                    "ClassType" : "FlowPortData",
+                    "GUID"      : "4fcbd5a2a4ad408eb005728106d8c5e5",
+                    "IsInputPort" : true,
+                    "Name"        : "In",
+                    "PortType"    : 0
+                },
+                {
+                    "ClassType" : "FlowPortData",
+                    "GUID"      : "a3157cc763424251bace31d5a7adf56b",
+                    "IsInputPort" : false,
+                    "Name"        : "Out",
+                    "PortType"    : 0
+                },
+                {
+                    "ClassType" : "FieldPortData",
+                    "GUID"      : "9dacbba24eee422e884001ad7b0d4be2",
+                    "IsInputPort" : true,
+                    "Name"        : "LogMsg",
+                    "PortType"    : 1,
+                    "FieldName"   : "LogMsg",
+                    "FieldTypeName" : "String",
+                    "FieldValue"    : "for loop end",
+                    "FieldDescription" : ""
+                }
+            ]
+        },
+        {
+            "ClassType" : "LogicNodeComparison",
+            "GUID"      : "39db89ee902b473686e9472995068649",
+            "Name"      : "",
+            "NodeType"  : 4,
+            "Position"  : [
+                1733.59997558594,
+                385.600006103516
+            ],
+            "Ports"     : [
+                {
+                    "ClassType" : "FieldPortData",
+                    "GUID"      : "8ad4086138a841b084df98a85c815749",
+                    "IsInputPort" : true,
+                    "Name"        : "A",
+                    "PortType"    : 1,
+                    "FieldName"   : "A",
+                    "FieldTypeName" : "Single",
+                    "FieldValue"    : "0",
+                    "FieldDescription" : ""
+                },
+                {
+                    "ClassType" : "FieldPortData",
+                    "GUID"      : "78031b62731e4a40a5fff1427f464a42",
+                    "IsInputPort" : true,
+                    "Name"        : "B",
+                    "PortType"    : 1,
+                    "FieldName"   : "B",
+                    "FieldTypeName" : "Single",
+                    "FieldValue"    : "5",
+                    "FieldDescription" : ""
+                },
+                {
+                    "ClassType" : "FieldPortData",
+                    "GUID"      : "95895fa6a6f7427d8a0eee4cd9989007",
+                    "IsInputPort" : false,
+                    "Name"        : "R1",
+                    "PortType"    : 1,
+                    "FieldName"   : "R1",
+                    "FieldTypeName" : "Boolean",
+                    "FieldValue"    : "False",
+                    "FieldDescription" : "A < B"
+                },
+                {
+                    "ClassType" : "FieldPortData",
+                    "GUID"      : "0f14207754284b9e870ad7102d1bd5ae",
+                    "IsInputPort" : false,
+                    "Name"        : "R2",
+                    "PortType"    : 1,
+                    "FieldName"   : "R2",
+                    "FieldTypeName" : "Boolean",
+                    "FieldValue"    : "False",
+                    "FieldDescription" : "A \u2264 B"
+                },
+                {
+                    "ClassType" : "FieldPortData",
+                    "GUID"      : "4fcce88341fb49a08f9b7ac2e529ec81",
+                    "IsInputPort" : false,
+                    "Name"        : "R3",
+                    "PortType"    : 1,
+                    "FieldName"   : "R3",
+                    "FieldTypeName" : "Boolean",
+                    "FieldValue"    : "False",
+                    "FieldDescription" : "A = B"
+                },
+                {
+                    "ClassType" : "FieldPortData",
+                    "GUID"      : "64498f1895074f48bb73fe4087055769",
+                    "IsInputPort" : false,
+                    "Name"        : "R4",
+                    "PortType"    : 1,
+                    "FieldName"   : "R4",
+                    "FieldTypeName" : "Boolean",
+                    "FieldValue"    : "False",
+                    "FieldDescription" : "A \u2260 B"
+                },
+                {
+                    "ClassType" : "FieldPortData",
+                    "GUID"      : "7715d4fce68f4439aa60285d83f9c009",
+                    "IsInputPort" : false,
+                    "Name"        : "R5",
+                    "PortType"    : 1,
+                    "FieldName"   : "R5",
+                    "FieldTypeName" : "Boolean",
+                    "FieldValue"    : "False",
+                    "FieldDescription" : "A > B"
+                },
+                {
+                    "ClassType" : "FieldPortData",
+                    "GUID"      : "439a2b14a800451fa674c30287f77ab7",
+                    "IsInputPort" : false,
+                    "Name"        : "R6",
+                    "PortType"    : 1,
+                    "FieldName"   : "R6",
+                    "FieldTypeName" : "Boolean",
+                    "FieldValue"    : "False",
+                    "FieldDescription" : "A \u2265 B"
+                }
+            ]
+        },
+        {
+            "ClassType" : "ValueNodeGetRandomInt",
+            "GUID"      : "a68903ce2b0746488946030bba1e0cd9",
+            "Name"      : "",
+            "NodeType"  : 2,
+            "Position"  : [
+                1198.39990234375,
+                -33.5999984741211
+            ],
+            "Ports"     : [
+                {
+                    "ClassType" : "FieldPortData",
+                    "GUID"      : "6b35c29a6c1a462985a961172c3d7129",
+                    "IsInputPort" : true,
+                    "Name"        : "Min",
+                    "PortType"    : 1,
+                    "FieldName"   : "Min",
+                    "FieldTypeName" : "Int32",
+                    "FieldValue"    : "0",
+                    "FieldDescription" : "range min"
+                },
+                {
+                    "ClassType" : "FieldPortData",
+                    "GUID"      : "600f586c480149a6b7e072971c978148",
+                    "IsInputPort" : true,
+                    "Name"        : "Max",
+                    "PortType"    : 1,
+                    "FieldName"   : "Max",
+                    "FieldTypeName" : "Int32",
+                    "FieldValue"    : "100",
+                    "FieldDescription" : "range max"
+                },
+                {
+                    "ClassType" : "FieldPortData",
+                    "GUID"      : "f42cdf3a12574a6bb595bcf7bc5f310e",
+                    "IsInputPort" : false,
+                    "Name"        : "R",
+                    "PortType"    : 1,
+                    "FieldName"   : "R",
+                    "FieldTypeName" : "Int32",
+                    "FieldValue"    : "0",
+                    "FieldDescription" : ""
+                }
+            ]
+        },
+        {
+            "ClassType" : "ValueNodeCreateVector2",
+            "GUID"      : "fde5346e36e649a09a74b28eda6efda7",
+            "Name"      : "",
+            "NodeType"  : 2,
+            "Position"  : [
+                1592.0,
+                16.7999992370605
+            ],
+            "Ports"     : [
+                {
+                    "ClassType" : "FieldPortData",
+                    "GUID"      : "6072b193b8e84c8bbf1c944293aef373",
+                    "IsInputPort" : true,
+                    "Name"        : "X",
+                    "PortType"    : 1,
+                    "FieldName"   : "X",
+                    "FieldTypeName" : "Single",
+                    "FieldValue"    : "0",
+                    "FieldDescription" : ""
+                },
+                {
+                    "ClassType" : "FieldPortData",
+                    "GUID"      : "48d4d714e4874146a5b6b9219299d9fd",
+                    "IsInputPort" : true,
+                    "Name"        : "Y",
+                    "PortType"    : 1,
+                    "FieldName"   : "Y",
+                    "FieldTypeName" : "Single",
+                    "FieldValue"    : "0",
+                    "FieldDescription" : ""
+                },
+                {
+                    "ClassType" : "FieldPortData",
+                    "GUID"      : "f295088181d747c081ffdbd014e5a2bc",
+                    "IsInputPort" : false,
+                    "Name"        : "Vec2",
+                    "PortType"    : 1,
+                    "FieldName"   : "Vec2",
+                    "FieldTypeName" : "Vector2",
+                    "FieldValue"    : "0,0",
+                    "FieldDescription" : ""
+                }
+            ]
+        },
+        {
+            "ClassType" : "FunctionNodeLog",
+            "GUID"      : "5473bed561dd4be59e925cdad6b14abc",
+            "Name"      : "",
+            "NodeType"  : 1,
+            "Position"  : [
+                1665.59997558594,
+                -136.800003051758
+            ],
+            "Ports"     : [
+                {
+                    "ClassType" : "FlowPortData",
+                    "GUID"      : "23ee4f35b1be4760949447cf6a4375c9",
+                    "IsInputPort" : true,
+                    "Name"        : "In",
+                    "PortType"    : 0
+                },
+                {
+                    "ClassType" : "FlowPortData",
+                    "GUID"      : "6562a99161cd4df09e1feadff0eae247",
+                    "IsInputPort" : false,
+                    "Name"        : "Out",
+                    "PortType"    : 0
+                },
+                {
+                    "ClassType" : "FieldPortData",
+                    "GUID"      : "99875878d1854b9fb9fb6736f3c3b5c1",
+                    "IsInputPort" : true,
+                    "Name"        : "LogMsg",
+                    "PortType"    : 1,
+                    "FieldName"   : "LogMsg",
+                    "FieldTypeName" : "String",
+                    "FieldValue"    : "",
+                    "FieldDescription" : ""
+                }
+            ]
+        },
+        {
+            "ClassType" : "FunctionNodeLog",
+            "GUID"      : "432ac70c612e4721b00232b029b552a6",
+            "Name"      : "",
+            "NodeType"  : 1,
+            "Position"  : [
+                1934.39990234375,
+                -46.4000015258789
+            ],
+            "Ports"     : [
+                {
+                    "ClassType" : "FlowPortData",
+                    "GUID"      : "5f372e78588743d5a8e0687e16c90a60",
+                    "IsInputPort" : true,
+                    "Name"        : "In",
+                    "PortType"    : 0
+                },
+                {
+                    "ClassType" : "FlowPortData",
+                    "GUID"      : "ba5eb8a58bf942e4a75f7c81df5ba927",
+                    "IsInputPort" : false,
+                    "Name"        : "Out",
+                    "PortType"    : 0
+                },
+                {
+                    "ClassType" : "FieldPortData",
+                    "GUID"      : "28b0c292059c43f09e23873ded70bc1d",
+                    "IsInputPort" : true,
+                    "Name"        : "LogMsg",
+                    "PortType"    : 1,
+                    "FieldName"   : "LogMsg",
+                    "FieldTypeName" : "String",
+                    "FieldValue"    : "",
+                    "FieldDescription" : ""
+                }
+            ]
+        },
+        {
+            "ClassType" : "FunctionNodeLog",
+            "GUID"      : "a2230cf972524b2294efd22ae4b72ce6",
+            "Name"      : "",
+            "NodeType"  : 1,
+            "Position"  : [
+                1183.19995117188,
+                177.600006103516
+            ],
+            "Ports"     : [
+                {
+                    "ClassType" : "FlowPortData",
+                    "GUID"      : "1a7e66c80f17421da8546cffae2307fa",
+                    "IsInputPort" : true,
+                    "Name"        : "In",
+                    "PortType"    : 0
+                },
+                {
+                    "ClassType" : "FlowPortData",
+                    "GUID"      : "bf55a0e7993d4ce79fe9d7e3c9d46be2",
+                    "IsInputPort" : false,
+                    "Name"        : "Out",
+                    "PortType"    : 0
+                },
+                {
+                    "ClassType" : "FieldPortData",
+                    "GUID"      : "e06e7f56342b4fcb92974a55fd47e7f1",
+                    "IsInputPort" : true,
+                    "Name"        : "LogMsg",
+                    "PortType"    : 1,
+                    "FieldName"   : "LogMsg",
+                    "FieldTypeName" : "String",
+                    "FieldValue"    : "event2 called",
+                    "FieldDescription" : ""
+                }
+            ]
+        },
+        {
+            "ClassType" : "ControlNodeIf",
+            "GUID"      : "592f04e2189544e3b899192c199a06a6",
+            "Name"      : "",
+            "NodeType"  : 3,
+            "Position"  : [
+                1960.0,
+                318.399993896484
+            ],
+            "Ports"     : [
+                {
+                    "ClassType" : "FlowPortData",
+                    "GUID"      : "af38012800574c75bf8f1c95b88c7006",
+                    "IsInputPort" : true,
+                    "Name"        : "In",
+                    "PortType"    : 0
+                },
+                {
+                    "ClassType" : "FlowPortData",
+                    "GUID"      : "65f988591cf94ce9a996af9a807b351b",
+                    "IsInputPort" : false,
+                    "Name"        : "True",
+                    "PortType"    : 0
+                },
+                {
+                    "ClassType" : "FlowPortData",
+                    "GUID"      : "7ab4f963c4b544f595a142c63be0461d",
+                    "IsInputPort" : false,
+                    "Name"        : "False",
+                    "PortType"    : 0
+                },
+                {
+                    "ClassType" : "FieldPortData",
+                    "GUID"      : "242ebb8259cc4f3abc4544556bef3413",
+                    "IsInputPort" : true,
+                    "Name"        : "BoolValue",
+                    "PortType"    : 1,
+                    "FieldName"   : "BoolValue",
+                    "FieldTypeName" : "Boolean",
+                    "FieldValue"    : "False",
+                    "FieldDescription" : ""
+                }
+            ]
+        },
+        {
+            "ClassType" : "FunctionNodeLog",
+            "GUID"      : "b1e3f3ccab124883bff27e547c685f70",
+            "Name"      : "",
+            "NodeType"  : 1,
+            "Position"  : [
+                2240.0,
+                278.399993896484
+            ],
+            "Ports"     : [
+                {
+                    "ClassType" : "FlowPortData",
+                    "GUID"      : "532aac64981149fdae897b94a03a44ad",
+                    "IsInputPort" : true,
+                    "Name"        : "In",
+                    "PortType"    : 0
+                },
+                {
+                    "ClassType" : "FlowPortData",
+                    "GUID"      : "3ddafba2dd1f4d228f936d91a4e6b91e",
+                    "IsInputPort" : false,
+                    "Name"        : "Out",
+                    "PortType"    : 0
+                },
+                {
+                    "ClassType" : "FieldPortData",
+                    "GUID"      : "fbe01c8489c4418d80314b29d9d4ec21",
+                    "IsInputPort" : true,
+                    "Name"        : "LogMsg",
+                    "PortType"    : 1,
+                    "FieldName"   : "LogMsg",
+                    "FieldTypeName" : "String",
+                    "FieldValue"    : "",
+                    "FieldDescription" : ""
+                }
+            ]
         }
-    ]
+    ],
+    "Edges" : {
+        "7ba996dee22e48a189bded58932ccdb9" : [
+            "629cee9d1dec4dcf9d9a81ba4d12cae1",
+            "191a937879d84934b99ee7d22c7aec93",
+            "afbce8879d7d4176b5519fe643836c28",
+            "e7ccc4526ec64778971f953b36338c3f"
+        ],
+        "b5e18485fa244292ad86684a688c4b49" : [
+            "f7580499849c4c629e752c626a4e9e0e",
+            "326b4e9afbff4985acaa0fd69cb7f866",
+            "a2230cf972524b2294efd22ae4b72ce6",
+            "1a7e66c80f17421da8546cffae2307fa"
+        ],
+        "f553da3751744deaa13bffbdef683e64" : [
+            "afbce8879d7d4176b5519fe643836c28",
+            "2cef41716b014e64852f7bf2d946f1da",
+            "5473bed561dd4be59e925cdad6b14abc",
+            "23ee4f35b1be4760949447cf6a4375c9"
+        ],
+        "18fc1aa9b08f4d6980ebf7476d30e46e" : [
+            "a2230cf972524b2294efd22ae4b72ce6",
+            "bf55a0e7993d4ce79fe9d7e3c9d46be2",
+            "37744eb7da3d4d948731c300fe153ea2",
+            "f8fb9b45667f4527b3db56c9ee040e94"
+        ],
+        "d179d3d0bf0e41128863629bda701367" : [
+            "37744eb7da3d4d948731c300fe153ea2",
+            "f0ffc5a03d164033a11a572771cd2762",
+            "f88c31d03b524755b46326b8e1b74033",
+            "4fcbd5a2a4ad408eb005728106d8c5e5"
+        ],
+        "ee536057b6e9401e82136c5304d6bb2f" : [
+            "37744eb7da3d4d948731c300fe153ea2",
+            "ee53a7a559dd4ff38cffae3c717b5748",
+            "592f04e2189544e3b899192c199a06a6",
+            "af38012800574c75bf8f1c95b88c7006"
+        ],
+        "c0831a3e810442ada2c55638aa58fb57" : [
+            "37744eb7da3d4d948731c300fe153ea2",
+            "658eee1133934a37b8d541102c561bfa",
+            "39db89ee902b473686e9472995068649",
+            "8ad4086138a841b084df98a85c815749"
+        ],
+        "d205dc22e74b4a7483d93b3a938aa575" : [
+            "39db89ee902b473686e9472995068649",
+            "439a2b14a800451fa674c30287f77ab7",
+            "592f04e2189544e3b899192c199a06a6",
+            "242ebb8259cc4f3abc4544556bef3413"
+        ],
+        "a59383299d494c78afb3464dc32965ac" : [
+            "a68903ce2b0746488946030bba1e0cd9",
+            "f42cdf3a12574a6bb595bcf7bc5f310e",
+            "fde5346e36e649a09a74b28eda6efda7",
+            "6072b193b8e84c8bbf1c944293aef373"
+        ],
+        "b493064ed06d4f3ebbe95f33198541eb" : [
+            "a68903ce2b0746488946030bba1e0cd9",
+            "f42cdf3a12574a6bb595bcf7bc5f310e",
+            "fde5346e36e649a09a74b28eda6efda7",
+            "48d4d714e4874146a5b6b9219299d9fd"
+        ],
+        "16f8d0cb523947079b96a6f5d8aaeeee" : [
+            "a68903ce2b0746488946030bba1e0cd9",
+            "f42cdf3a12574a6bb595bcf7bc5f310e",
+            "5473bed561dd4be59e925cdad6b14abc",
+            "99875878d1854b9fb9fb6736f3c3b5c1"
+        ],
+        "d1fd62e34b9741d8bc2a01a3b4670381" : [
+            "fde5346e36e649a09a74b28eda6efda7",
+            "f295088181d747c081ffdbd014e5a2bc",
+            "432ac70c612e4721b00232b029b552a6",
+            "28b0c292059c43f09e23873ded70bc1d"
+        ],
+        "53b2f6e9b9ff400d8fd4f228c31bc09d" : [
+            "5473bed561dd4be59e925cdad6b14abc",
+            "6562a99161cd4df09e1feadff0eae247",
+            "432ac70c612e4721b00232b029b552a6",
+            "5f372e78588743d5a8e0687e16c90a60"
+        ],
+        "6fc58a9ebdf34fac83153bf034b26f51" : [
+            "592f04e2189544e3b899192c199a06a6",
+            "65f988591cf94ce9a996af9a807b351b",
+            "b1e3f3ccab124883bff27e547c685f70",
+            "532aac64981149fdae897b94a03a44ad"
+        ]
+    }
 }

@@ -4,7 +4,7 @@ namespace LiteGraphFrame
     {
         public LogicNodeData() : base()
         {
-            NodeType = ENodeType.Logic;
+            m_NodeType = ENodeType.Logic;
         }
 
         protected override void InitlizationPort()

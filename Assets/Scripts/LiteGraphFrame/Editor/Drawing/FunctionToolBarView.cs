@@ -8,34 +8,37 @@ namespace LiteGraphFrame
     class FunctionToolBarView : VisualElement
     {
         private LiteGraphEditorWindow m_OwnerEditorWindow;
+        private Action m_SaveCallback;
+        private Action m_SaveAsCallback;
+        private Action m_ShowInProjectCallback;
+        private Action m_GenerateNodeCallback;
 
-        public Action SaveCallback { get; set; }
-        public Action SaveAsCallback { get; set; }
-        public Action ShowInProjectCallback { get; set; }
-        public Action GenerateNodeCallback { get; set; }
-
-        public FunctionToolBarView(LiteGraphEditorWindow ownerEditorWindow)
+        public FunctionToolBarView(LiteGraphEditorWindow ownerEditorWindow, Action saveCallback, Action saveAsCallback, Action showInProjectCallback, Action generateNodeCallback)
         {
             m_OwnerEditorWindow = ownerEditorWindow;
+            m_SaveCallback = saveCallback;
+            m_SaveAsCallback = saveAsCallback;
+            m_ShowInProjectCallback = showInProjectCallback;
+            m_GenerateNodeCallback = generateNodeCallback;
         }
 
         public void Initlization()
         {
             var toolbar = new Toolbar();
 
-            Button saveBtn = new Button(clickEvent: SaveCallback);
+            Button saveBtn = new Button(clickEvent: m_SaveCallback);
             saveBtn.text = "Save";
             toolbar.Add(saveBtn);
 
-            Button saveAsBtn = new Button(clickEvent: SaveAsCallback);
+            Button saveAsBtn = new Button(clickEvent: m_SaveAsCallback);
             saveAsBtn.text = "Save As";
             toolbar.Add(saveAsBtn);
 
-            Button showInProjectBtn = new Button(clickEvent: ShowInProjectCallback);
+            Button showInProjectBtn = new Button(clickEvent: m_ShowInProjectCallback);
             showInProjectBtn.text = "Show In Project";
             toolbar.Add(showInProjectBtn);
 
-            Button generateNodeBtn = new Button(clickEvent: GenerateNodeCallback);
+            Button generateNodeBtn = new Button(clickEvent: m_GenerateNodeCallback);
             generateNodeBtn.text = "Generate Node";
             toolbar.Add(generateNodeBtn);
 

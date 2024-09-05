@@ -11,6 +11,7 @@ namespace LiteGraphFrame
         static LiteGraphNodeFactory()
         {
             m_CreateFuncDict = new Dictionary<string, CreateRuntimeNodeDeleagte>();
+            InitBuiltinFactory();
         }
 
         public static void RegisterCreateNodeFunc(string nodeType, CreateRuntimeNodeDeleagte func)
