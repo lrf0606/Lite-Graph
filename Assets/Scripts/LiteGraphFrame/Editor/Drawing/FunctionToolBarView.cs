@@ -11,15 +11,13 @@ namespace LiteGraphFrame
         private Action m_SaveCallback;
         private Action m_SaveAsCallback;
         private Action m_ShowInProjectCallback;
-        private Action m_GenerateNodeCallback;
 
-        public FunctionToolBarView(LiteGraphEditorWindow ownerEditorWindow, Action saveCallback, Action saveAsCallback, Action showInProjectCallback, Action generateNodeCallback)
+        public FunctionToolBarView(LiteGraphEditorWindow ownerEditorWindow, Action saveCallback, Action saveAsCallback, Action showInProjectCallback)
         {
             m_OwnerEditorWindow = ownerEditorWindow;
             m_SaveCallback = saveCallback;
             m_SaveAsCallback = saveAsCallback;
             m_ShowInProjectCallback = showInProjectCallback;
-            m_GenerateNodeCallback = generateNodeCallback;
         }
 
         public void Initlization()
@@ -37,10 +35,6 @@ namespace LiteGraphFrame
             Button showInProjectBtn = new Button(clickEvent: m_ShowInProjectCallback);
             showInProjectBtn.text = "Show In Project";
             toolbar.Add(showInProjectBtn);
-
-            Button generateNodeBtn = new Button(clickEvent: m_GenerateNodeCallback);
-            generateNodeBtn.text = "Generate Node";
-            toolbar.Add(generateNodeBtn);
 
             Add(toolbar);
         }

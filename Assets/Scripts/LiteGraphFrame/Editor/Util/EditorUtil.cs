@@ -31,6 +31,16 @@ namespace LiteGraphFrame
             }
             return true;
         }
+
+        [MenuItem("Tools/Lite Graph Frame/Code Generate")]
+        public static void CodeGenerate()
+        {
+            Debug.Log("CodeGenerate start!");
+            CodeGenerateUtil.ValidateDirectory();
+            NodeTypeGenerator.Generate();
+            NodeRuntimeGenerator.Generate();
+            AssetDatabase.Refresh();
+        }
     }
 
     class NewLiteGraphActoin : EndNameEditAction

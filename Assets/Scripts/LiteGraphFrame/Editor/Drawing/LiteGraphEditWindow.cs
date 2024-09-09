@@ -50,7 +50,7 @@ namespace LiteGraphFrame
             m_GraphData = new GraphData(assetPath);
             m_GraphData.Deserialize(fileData);
 
-            m_FunctionToolBar = new FunctionToolBarView(this, SaveAsset, SaveAs, ShowInProject, GenerateNode);
+            m_FunctionToolBar = new FunctionToolBarView(this, SaveAsset, SaveAs, ShowInProject);
             m_FunctionToolBar.Initlization();
             this.rootVisualElement.Add(m_FunctionToolBar);
 
@@ -92,14 +92,6 @@ namespace LiteGraphFrame
                 var asset = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(path);
                 EditorGUIUtility.PingObject(asset);
             }
-        }
-
-        void GenerateNode()
-        {
-            CodeGenerateConfig.ValidateDirectory();
-            NodeTypeGenerator.Generate();
-            NodeRuntimeGenerator.Generate();
-            AssetDatabase.Refresh();
         }
     }
 }

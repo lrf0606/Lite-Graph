@@ -10,6 +10,9 @@ namespace LiteGraphFrame
 {
     static class NodeRuntimeGenerator
     {
+        private const string ExecuteLogicStart = "        // === Execute Logic Start ===";
+        private const string ExecuteLogicEnd = "        // === Execute Logic End ===";
+
         public static void Generate()
         {
             GenerateNodeRuntimeCode(true);
@@ -18,7 +21,7 @@ namespace LiteGraphFrame
 
         private static string GetFilePath(bool isBuiltin, Type type)
         {
-            string directory = isBuiltin ? CodeGenerateConfig.BuiltinNodeRuntimeDirectory : CodeGenerateConfig.CustomNodeRuntimeDirectory;
+            string directory = isBuiltin ? LiteGraphFrameConfig.BuiltinNodeRuntimeDirectory : LiteGraphFrameConfig.CustomNodeRuntimeDirectory;
             return $"{directory}/{type.Name}.cs";
         }
 
@@ -44,11 +47,11 @@ namespace LiteGraphFrame
                     if (File.Exists(filePath)) 
                     {
                         string source = File.ReadAllText(filePath);
-                        code = CodeGenerateConfig.ReplaceStringByStartAndEnd(source, code, CodeGenerateConfig.GenerateStart, CodeGenerateConfig.GenerateEnd);
+                        code = CodeGenerateUtil.ReplaceStringByStartAndEnd(source, code, CodeGenerateUtil.GenerateStart, CodeGenerateUtil.GenerateEnd);
                     }
                     else
                     {
-                        code = $"{CodeGenerateConfig.UsingNamespace}{Environment.NewLine}{code}"; // 加个using防止后续编辑器自动不全using到错误位置
+                        code = $"{CodeGenerateUtil.UsingNamespace}{Environment.NewLine}{code}"; // 加个using防止后续编辑器自动不全using到错误位置
                         
                     }
                     File.WriteAllText(filePath, code);
@@ -59,8 +62,8 @@ namespace LiteGraphFrame
         private static string GetCodeString(bool isBuiltin, Type type)
         {
             var code = new StringBuilder();
-            string head = CodeGenerateConfig.GenerateStart;
-            string tail = CodeGenerateConfig.GenerateEnd;
+            string head = CodeGenerateUtil.GenerateStart;
+            string tail = CodeGenerateUtil.GenerateEnd;
             code.AppendLine(head);
             code.AppendLine($"namespace {type.Namespace}");
             code.AppendLine("{");
@@ -177,16 +180,16 @@ namespace LiteGraphFrame
             if (File.Exists(filePath))
             {
                 string allCode = File.ReadAllText(filePath);
-                oldExecLogicCode = CodeGenerateConfig.GetStringByStartAndEnd(allCode, CodeGenerateConfig.ExecuteLogicStart, CodeGenerateConfig.ExecuteLogicEnd);
+                oldExecLogicCode = CodeGenerateUtil.GetStringByStartAndEnd(allCode, ExecuteLogicStart, ExecuteLogicEnd);
             }
             if (string.IsNullOrEmpty(oldExecLogicCode))
             {
-                code.AppendLine(CodeGenerateConfig.ExecuteLogicStart);
+                code.AppendLine(ExecuteLogicStart);
                 code.AppendLine("        public override void ExecuteLogic()");
                 code.AppendLine("        {");
                 code.AppendLine("            ");
                 code.AppendLine("        }");
-                code.AppendLine(CodeGenerateConfig.ExecuteLogicEnd);
+                code.AppendLine(ExecuteLogicEnd);
                 return code.ToString();
             }
             else

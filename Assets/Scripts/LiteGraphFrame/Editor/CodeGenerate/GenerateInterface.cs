@@ -8,27 +8,21 @@ namespace LiteGraphFrame
 
     }
 
-    public static class CodeGenerateConfig
+    public static class CodeGenerateUtil
     {
-        public const string BuiltinNodeRuntimeDirectory = "Assets/Scripts/LiteGraphFrame/Runtime/Nodes"; // 内置节点存放目录
-        public const string CustomNodeRuntimeDirectory = "Assets/LiteGraphFiles/Nodes"; // 自定义节点存放目录
-        public const string NodeFactoryFileName = "NodeFactory.cs";
-
         public const string GenerateStart = "// === LiteGraphFrame Code Generate Start ===";
         public const string GenerateEnd = "// === LiteGraphFrame Code Generate End ===";
-        public const string ExecuteLogicStart = "        // === Execute Logic Start ===";
-        public const string ExecuteLogicEnd = "        // === Execute Logic End ===";
         public const string UsingNamespace = "using System;";
 
         public static void ValidateDirectory()
         {
-            if (!Directory.Exists(BuiltinNodeRuntimeDirectory))
+            if (!Directory.Exists(LiteGraphFrameConfig.BuiltinNodeRuntimeDirectory))
             {
-                Directory.CreateDirectory(BuiltinNodeRuntimeDirectory);
+                Directory.CreateDirectory(LiteGraphFrameConfig.BuiltinNodeRuntimeDirectory);
             }
-            if (!Directory.Exists(CustomNodeRuntimeDirectory))
+            if (!Directory.Exists(LiteGraphFrameConfig.CustomNodeRuntimeDirectory))
             {
-                Directory.CreateDirectory(CustomNodeRuntimeDirectory);
+                Directory.CreateDirectory(LiteGraphFrameConfig.CustomNodeRuntimeDirectory);
             }
         }
 
