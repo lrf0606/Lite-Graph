@@ -17,19 +17,35 @@
 
 下载项目后直接作为Unity项目打开，在Unity编辑器Project面板中打开Asset/LiteGraphFiles/Example.litegraph样例文件，修改后点击左上角"Save"按钮保存，运行项目后检查运行时效果。
 
+![示例](Assets/example.png)
+
 ### （二）正常接入
 
-1.拷贝Asset/Scripts/LiteGraphFrame文件夹到项目代码中。
+1.拷贝Asset/Scripts/LiteGraphFrame文件夹到项目代码中，修改LiteGraphFrame/Editor/Config.cs的两个配置路径，指定自定义节点和内置节点的代码生成存放路径。
 
-2.修改LiteGraphFrame/Editor/CodeGenerate/GenerateInterface中的"BuiltinNodeRuntimeDirectory"和"CustomNodeRuntimeDirectory"两个配置路径，指定内置节点和自定义节点的存放路径。
+2.点击Tools/Lite Graph Frame/Code Generate，会根据上一步的配置路径在指定路径生成节点代码。
 
-3.Unity编辑器Project面板中右键"Create/Lite Graph File"创建一份litegraph文件，点击“Generate Node”按钮会在根据第2步中配置的路径生成一个“LiteGraphFiles"文件夹，建议在此文件夹中存放后续litegraph文件和自定义节点代码。
+3.Unity编辑器Project面板中右键"Create/Lite Graph File"创建一份litegraph文件，双击打开litegraph可以进行编辑。
 
-4.声明自定义节点，具体格式可参考示例项目的Asset/LiteGraphFiles/Editor中的代码；打开任一litegraph文件点击“Generate Node”按钮，在"CustomNodeRuntimeDirectory"路径下会生成自定义节点的实现代码，编写代码实现想要的逻辑，可以参考示例项目的Asset/LiteGraphFiles/Nodes中的代码。
+4.[项目自定义节点拓展。](#node-extension)
 
 5.打开任一litegraph文件编辑内容，右键选择"Create Node"创建节点，连线节点之间的端口控制流程和数据输入，编辑完成后点击"Save"按钮保存文件。
 
 6.运行时测试，代码可以参考"Asset/RunLiteGraphExample.cs"。
+
+```c#
+void Start()
+{
+    // 只需初始化一次
+    LiteGraphNodeFactory.InitCustomFactory();
+
+    // 运行时测试
+    int eventId = 1; // EventNodeEventTest1.GetEventId()的返回值
+    LiteGraphRuntimeUtil.RunLiteGrpah("Assets/LiteGraphFiles/Example.litegraph", eventId);
+    eventId = 2; // EventNodeEventTest2.GetEventId()的返回值
+    LiteGraphRuntimeUtil.RunLiteGrpah("Assets/LiteGraphFiles/Example.litegraph", eventId);
+}
+```
 
 ### （三）名词说明
 
@@ -44,23 +60,41 @@
 2.端口
 
 - 流程端口：负责节点的运行顺序控制。
-- 数据端口：负责节点间的数据传递。‘
+- 数据端口：负责节点间的数据传递。
 
 3.litegraph文件
 
 - 把节点、端口、端口间连线等内容序列化存储得到一份json格式文件，运行时反序列化重新构建节点结构。
-
 - 一般以模块划分文件，例如skill1001.litegraph、skill1002.litegraph、skill1003.litegraph，buff001.litegraph、buff002.litegraph。
 
-### （四）节点拓展
+### <a name="node-extension">（四）节点拓展 </a>
 
 1.自定义节点拓展
 
+①进行节点声明，参考LiteGraphFiles/Editor/Nodes里的各种节点。
 
+②点击Tools/Lite Graph Frame/Code Generate生成节点代码。
+
+③进行节点功能实现，参考LiteGraphFiles/Nodes里的各种节点。
 
 2.内置节点拓展
 
+①进行节点声明，需继承IBuiltinNode接口，参考LiteGraphFrame/Editor/Nodes里的各种节点。
+
+②点击Tools/Lite Graph Frame/Code Generate生成节点代码。
+
+③进行节点功能实现，参考LiteGraphFrame/Runtime/Nodes里的各种节点。
+
 ## 三、源码实现
 
-## 四、后续计划
+1.图形接口使用Unity的GraphView实现，部分界面代码参考Shader Graph实现，界面代码都在LiteGraphFrame/Editor/Drawing中。
 
+2.序列化和反序列化使用LitJson库，只使用了基础的JsonData和string相互转化，未使用序列化对象功能。
+
+3.使用代码生成，替代运行时使用反射创建类实例、给字段赋值。
+
+### 四、未来计划
+
+1.sub graph、注释节点、group、动态端口等功能支持。
+
+2.界面功能补充。
