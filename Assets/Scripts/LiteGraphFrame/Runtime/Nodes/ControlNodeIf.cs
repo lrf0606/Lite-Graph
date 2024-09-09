@@ -4,7 +4,7 @@ namespace LiteGraphFrame
 {
     public partial class ControlNodeIf : NodeRuntime
     {
-        public System.Boolean BoolValue;
+        public bool BoolValue;
 
         public override object GetValue(string fieldName)
         {
@@ -18,7 +18,7 @@ namespace LiteGraphFrame
         {
             switch (fieldName)
             {
-                case "BoolValue": { BoolValue = (System.Boolean)value; break; };
+                case "BoolValue": { BoolValue = (bool)value; break; };
                 default: break;
             }
         }

@@ -4,9 +4,9 @@ namespace LiteGraphFrame
 {
     public partial class ValueNodeCreateVector2 : NodeRuntime
     {
-        public System.Single X;
-        public System.Single Y;
-        public UnityEngine.Vector2 Vec2;
+        public float X;
+        public float Y;
+        public LitJson.Vector2 Vec2;
 
         public override object GetValue(string fieldName)
         {
@@ -22,9 +22,9 @@ namespace LiteGraphFrame
         {
             switch (fieldName)
             {
-                case "X": { X = (System.Single)value; break; };
-                case "Y": { Y = (System.Single)value; break; };
-                case "Vec2": { Vec2 = (UnityEngine.Vector2)value; break; };
+                case "X": { X = (float)value; break; };
+                case "Y": { Y = (float)value; break; };
+                case "Vec2": { Vec2 = (LitJson.Vector2)value; break; };
                 default: break;
             }
         }
@@ -32,7 +32,7 @@ namespace LiteGraphFrame
         // === Execute Logic Start ===
         public override void ExecuteLogic()
         {
-            Vec2 = new UnityEngine.Vector2(X, Y);
+            Vec2 = new LitJson.Vector2(X, Y);
         }
         // === Execute Logic End ===
     }

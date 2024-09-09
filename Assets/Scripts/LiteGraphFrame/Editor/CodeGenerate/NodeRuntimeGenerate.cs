@@ -1,3 +1,4 @@
+using LitJson;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -93,23 +94,31 @@ namespace LiteGraphFrame
             // fields
             foreach(var fieldInfo in type.GetFields())
             {
+                if (!fieldInfo.IsPublic)
+                {
+                    continue;
+                }
                 var inputAttribute = fieldInfo.GetCustomAttribute<NodeInputAttribute>();
                 if (inputAttribute == null)
                 {
                     continue;
                 }
-                code.AppendLine($"        public {fieldInfo.FieldType} {fieldInfo.Name};");
+                code.AppendLine($"        public {ValueParserUtil.GetFieldTypeTransform(fieldInfo.FieldType.Name)} {fieldInfo.Name};");
                 fields.Add(fieldInfo);
             }
 
             foreach (var fieldInfo in type.GetFields())
             {
+                if (!fieldInfo.IsPublic)
+                {
+                    continue;
+                }
                 var outputAttribute = fieldInfo.GetCustomAttribute<NodeOutputAttribute>();
                 if (outputAttribute == null)
                 {
                     continue;
                 }
-                code.AppendLine($"        public {fieldInfo.FieldType} {fieldInfo.Name};");
+                code.AppendLine($"        public {ValueParserUtil.GetFieldTypeTransform(fieldInfo.FieldType.Name)} {fieldInfo.Name};");
                 fields.Add(fieldInfo);
             }
 
@@ -137,7 +146,7 @@ namespace LiteGraphFrame
             code.AppendLine("            {");
             foreach (var field in fields)
             {
-                code.AppendLine($"                case \"{field.Name}\": {{ {field.Name} = ({field.FieldType})value; break; }};");
+                code.AppendLine($"                case \"{field.Name}\": {{ {field.Name} = ({ValueParserUtil.GetFieldTypeTransform(field.FieldType.Name)})value; break; }};");
             }
             code.AppendLine("                default: break;");
             code.AppendLine("            }");

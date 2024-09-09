@@ -45,7 +45,7 @@ namespace LiteGraphFrame
                         if (port.PortType == EPortType.Field)
                         {
                             string fieldTypeName = (string)portJsonData["FieldTypeName"];
-                            port.InitFieldInfo((string)portJsonData["FieldName"], ValuePraseUtil.ToObject(fieldTypeName, (string)portJsonData["FieldValue"]), fieldTypeName);
+                            port.InitFieldInfo((string)portJsonData["FieldName"], ValueParserUtil.ToObject(fieldTypeName, (string)portJsonData["FieldValue"]), fieldTypeName);
                         }
                         portList.Add(port);
                         portDict[(string)portJsonData["GUID"]] = port;

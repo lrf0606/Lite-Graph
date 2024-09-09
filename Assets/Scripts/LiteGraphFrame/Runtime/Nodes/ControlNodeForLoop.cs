@@ -5,10 +5,10 @@ namespace LiteGraphFrame
 {
     public partial class ControlNodeForLoop : NodeRuntime
     {
-        public System.Int32 First;
-        public System.Int32 Last;
-        public System.Int32 Step;
-        public System.Int32 Index;
+        public int First;
+        public int Last;
+        public int Step;
+        public int Index;
 
         public override object GetValue(string fieldName)
         {
@@ -25,10 +25,10 @@ namespace LiteGraphFrame
         {
             switch (fieldName)
             {
-                case "First": { First = (System.Int32)value; break; };
-                case "Last": { Last = (System.Int32)value; break; };
-                case "Step": { Step = (System.Int32)value; break; };
-                case "Index": { Index = (System.Int32)value; break; };
+                case "First": { First = (int)value; break; };
+                case "Last": { Last = (int)value; break; };
+                case "Step": { Step = (int)value; break; };
+                case "Index": { Index = (int)value; break; };
                 default: break;
             }
         }

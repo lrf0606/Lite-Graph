@@ -8,8 +8,8 @@
             "Name"      : "",
             "NodeType"  : 0,
             "Position"  : [
-                1041.59997558594,
-                -163.199996948242
+                1056.79992675781,
+                -228.800003051758
             ],
             "Ports"     : [
                 {
@@ -338,17 +338,17 @@
         },
         {
             "ClassType" : "ValueNodeCreateVector2",
-            "GUID"      : "fde5346e36e649a09a74b28eda6efda7",
+            "GUID"      : "a095d1fabb41401f80c0604b62c12229",
             "Name"      : "",
             "NodeType"  : 2,
             "Position"  : [
-                1592.0,
-                16.7999992370605
+                1634.39990234375,
+                34.4000015258789
             ],
             "Ports"     : [
                 {
                     "ClassType" : "FieldPortData",
-                    "GUID"      : "6072b193b8e84c8bbf1c944293aef373",
+                    "GUID"      : "ce0ba1de9874466db72b75bdd621fb82",
                     "IsInputPort" : true,
                     "Name"        : "X",
                     "PortType"    : 1,
@@ -359,7 +359,7 @@
                 },
                 {
                     "ClassType" : "FieldPortData",
-                    "GUID"      : "48d4d714e4874146a5b6b9219299d9fd",
+                    "GUID"      : "48a42e501e0b4234bec9a9df3870f572",
                     "IsInputPort" : true,
                     "Name"        : "Y",
                     "PortType"    : 1,
@@ -370,13 +370,13 @@
                 },
                 {
                     "ClassType" : "FieldPortData",
-                    "GUID"      : "f295088181d747c081ffdbd014e5a2bc",
+                    "GUID"      : "71800937c79a495fbdcab14413c1351e",
                     "IsInputPort" : false,
                     "Name"        : "Vec2",
                     "PortType"    : 1,
                     "FieldName"   : "Vec2",
                     "FieldTypeName" : "Vector2",
-                    "FieldValue"    : "0,0",
+                    "FieldValue"    : "(0.00, 0.00)",
                     "FieldDescription" : ""
                 }
             ]
@@ -542,8 +542,8 @@
             "Name"      : "",
             "NodeType"  : 1,
             "Position"  : [
-                2240.0,
-                278.399993896484
+                2258.39990234375,
+                284.799987792969
             ],
             "Ports"     : [
                 {
@@ -568,92 +568,92 @@
                     "PortType"    : 1,
                     "FieldName"   : "LogMsg",
                     "FieldTypeName" : "String",
-                    "FieldValue"    : "",
+                    "FieldValue"    : "Index >= 5",
                     "FieldDescription" : ""
                 }
             ]
         }
     ],
     "Edges" : {
-        "7ba996dee22e48a189bded58932ccdb9" : [
+        "ac2155bdefbe4d14b5b85a3a0d9fa1ce" : [
             "629cee9d1dec4dcf9d9a81ba4d12cae1",
             "191a937879d84934b99ee7d22c7aec93",
             "afbce8879d7d4176b5519fe643836c28",
             "e7ccc4526ec64778971f953b36338c3f"
         ],
-        "b5e18485fa244292ad86684a688c4b49" : [
+        "2e2a338e9d8d4dcc945674d639194c46" : [
             "f7580499849c4c629e752c626a4e9e0e",
             "326b4e9afbff4985acaa0fd69cb7f866",
             "a2230cf972524b2294efd22ae4b72ce6",
             "1a7e66c80f17421da8546cffae2307fa"
         ],
-        "f553da3751744deaa13bffbdef683e64" : [
+        "184d825bc06d477dbf60f7b4f7a96b12" : [
             "afbce8879d7d4176b5519fe643836c28",
             "2cef41716b014e64852f7bf2d946f1da",
             "5473bed561dd4be59e925cdad6b14abc",
             "23ee4f35b1be4760949447cf6a4375c9"
         ],
-        "18fc1aa9b08f4d6980ebf7476d30e46e" : [
+        "b1ebf8226fc24e28bd9daaf61d70b0c7" : [
             "a2230cf972524b2294efd22ae4b72ce6",
             "bf55a0e7993d4ce79fe9d7e3c9d46be2",
             "37744eb7da3d4d948731c300fe153ea2",
             "f8fb9b45667f4527b3db56c9ee040e94"
         ],
-        "d179d3d0bf0e41128863629bda701367" : [
+        "27e425565a4e4cd3a0dada130a603bfe" : [
             "37744eb7da3d4d948731c300fe153ea2",
             "f0ffc5a03d164033a11a572771cd2762",
             "f88c31d03b524755b46326b8e1b74033",
             "4fcbd5a2a4ad408eb005728106d8c5e5"
         ],
-        "ee536057b6e9401e82136c5304d6bb2f" : [
+        "473fffd3d555469eb21e6e2a3159412a" : [
             "37744eb7da3d4d948731c300fe153ea2",
             "ee53a7a559dd4ff38cffae3c717b5748",
             "592f04e2189544e3b899192c199a06a6",
             "af38012800574c75bf8f1c95b88c7006"
         ],
-        "c0831a3e810442ada2c55638aa58fb57" : [
+        "90c2b2e67951419b90fc11bd90bcb6b8" : [
             "37744eb7da3d4d948731c300fe153ea2",
             "658eee1133934a37b8d541102c561bfa",
             "39db89ee902b473686e9472995068649",
             "8ad4086138a841b084df98a85c815749"
         ],
-        "d205dc22e74b4a7483d93b3a938aa575" : [
+        "dd5d19959a0647d79772e140c5219bde" : [
             "39db89ee902b473686e9472995068649",
             "439a2b14a800451fa674c30287f77ab7",
             "592f04e2189544e3b899192c199a06a6",
             "242ebb8259cc4f3abc4544556bef3413"
         ],
-        "a59383299d494c78afb3464dc32965ac" : [
+        "19eb4ce071be4ea1a433185730943ef9" : [
             "a68903ce2b0746488946030bba1e0cd9",
             "f42cdf3a12574a6bb595bcf7bc5f310e",
-            "fde5346e36e649a09a74b28eda6efda7",
-            "6072b193b8e84c8bbf1c944293aef373"
+            "a095d1fabb41401f80c0604b62c12229",
+            "48a42e501e0b4234bec9a9df3870f572"
         ],
-        "b493064ed06d4f3ebbe95f33198541eb" : [
+        "3b6830feec8b4c0c864ef7e090e6f134" : [
             "a68903ce2b0746488946030bba1e0cd9",
             "f42cdf3a12574a6bb595bcf7bc5f310e",
-            "fde5346e36e649a09a74b28eda6efda7",
-            "48d4d714e4874146a5b6b9219299d9fd"
+            "a095d1fabb41401f80c0604b62c12229",
+            "ce0ba1de9874466db72b75bdd621fb82"
         ],
-        "16f8d0cb523947079b96a6f5d8aaeeee" : [
+        "0051e286f105488f9f575f97d5bdb0e5" : [
             "a68903ce2b0746488946030bba1e0cd9",
             "f42cdf3a12574a6bb595bcf7bc5f310e",
             "5473bed561dd4be59e925cdad6b14abc",
             "99875878d1854b9fb9fb6736f3c3b5c1"
         ],
-        "d1fd62e34b9741d8bc2a01a3b4670381" : [
-            "fde5346e36e649a09a74b28eda6efda7",
-            "f295088181d747c081ffdbd014e5a2bc",
+        "8cf1e8bae77b4f4bba945faa6554f669" : [
+            "a095d1fabb41401f80c0604b62c12229",
+            "71800937c79a495fbdcab14413c1351e",
             "432ac70c612e4721b00232b029b552a6",
             "28b0c292059c43f09e23873ded70bc1d"
         ],
-        "53b2f6e9b9ff400d8fd4f228c31bc09d" : [
+        "d5f115ee2440403f8465aeb60478add4" : [
             "5473bed561dd4be59e925cdad6b14abc",
             "6562a99161cd4df09e1feadff0eae247",
             "432ac70c612e4721b00232b029b552a6",
             "5f372e78588743d5a8e0687e16c90a60"
         ],
-        "6fc58a9ebdf34fac83153bf034b26f51" : [
+        "743c415c6c3844b091b011c33855117e" : [
             "592f04e2189544e3b899192c199a06a6",
             "65f988591cf94ce9a996af9a807b351b",
             "b1e3f3ccab124883bff27e547c685f70",

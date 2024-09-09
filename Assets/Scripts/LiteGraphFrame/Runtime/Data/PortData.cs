@@ -61,7 +61,7 @@ namespace LiteGraphFrame
             }
             else
             {
-                m_FieldValue = ValuePraseUtil.ToObject(m_FieldTypeName, ValuePraseUtil.ToString(connectedPort.FieldTypeName, connectedPort.FieldValue));
+                m_FieldValue = ValueParserUtil.ToObject(m_FieldTypeName, connectedPort.FieldValue.ToString());
             }
         }
     }

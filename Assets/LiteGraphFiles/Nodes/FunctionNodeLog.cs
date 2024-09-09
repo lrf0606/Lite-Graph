@@ -5,7 +5,7 @@ namespace LiteGraphFrame
 {
     public partial class FunctionNodeLog : NodeRuntime
     {
-        public System.String LogMsg;
+        public string LogMsg;
 
         public override object GetValue(string fieldName)
         {
@@ -19,7 +19,7 @@ namespace LiteGraphFrame
         {
             switch (fieldName)
             {
-                case "LogMsg": { LogMsg = (System.String)value; break; };
+                case "LogMsg": { LogMsg = (string)value; break; };
                 default: break;
             }
         }

@@ -4,8 +4,8 @@ namespace LiteGraphFrame
 {
     public partial class LogicNodeNegate : NodeRuntime
     {
-        public System.Boolean A;
-        public System.Boolean R;
+        public bool A;
+        public bool R;
 
         public override object GetValue(string fieldName)
         {
@@ -20,8 +20,8 @@ namespace LiteGraphFrame
         {
             switch (fieldName)
             {
-                case "A": { A = (System.Boolean)value; break; };
-                case "R": { R = (System.Boolean)value; break; };
+                case "A": { A = (bool)value; break; };
+                case "R": { R = (bool)value; break; };
                 default: break;
             }
         }

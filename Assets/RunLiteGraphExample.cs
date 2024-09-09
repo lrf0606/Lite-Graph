@@ -9,11 +9,14 @@ public class LiteGraphRuntime : MonoBehaviour
 
     void Start()
     {
+        // 只需初始化一次
         LiteGraphNodeFactory.InitCustomFactory();
-        Debug.Log("Run Event1");
-        LiteGraphRuntimeUtil.RunLiteGrpah("Assets/LiteGraphFiles/Example.litegraph", 1);
-        Debug.Log("Run Event2");
-        LiteGraphRuntimeUtil.RunLiteGrpah("Assets/LiteGraphFiles/Example.litegraph", 2);
+
+        // 运行时测试
+        int eventId = 1; // EventNodeEventTest1.GetEventId()的返回值
+        LiteGraphRuntimeUtil.RunLiteGrpah("Assets/LiteGraphFiles/Example.litegraph", eventId);
+        eventId = 2; // EventNodeEventTest2.GetEventId()的返回值
+        LiteGraphRuntimeUtil.RunLiteGrpah("Assets/LiteGraphFiles/Example.litegraph", eventId);
      
     }
 

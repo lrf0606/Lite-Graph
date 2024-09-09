@@ -4,14 +4,14 @@ namespace LiteGraphFrame
 {
     public partial class LogicNodeComparison : NodeRuntime
     {
-        public System.Single A;
-        public System.Single B;
-        public System.Boolean R1;
-        public System.Boolean R2;
-        public System.Boolean R3;
-        public System.Boolean R4;
-        public System.Boolean R5;
-        public System.Boolean R6;
+        public float A;
+        public float B;
+        public bool R1;
+        public bool R2;
+        public bool R3;
+        public bool R4;
+        public bool R5;
+        public bool R6;
 
         public override object GetValue(string fieldName)
         {
@@ -32,14 +32,14 @@ namespace LiteGraphFrame
         {
             switch (fieldName)
             {
-                case "A": { A = (System.Single)value; break; };
-                case "B": { B = (System.Single)value; break; };
-                case "R1": { R1 = (System.Boolean)value; break; };
-                case "R2": { R2 = (System.Boolean)value; break; };
-                case "R3": { R3 = (System.Boolean)value; break; };
-                case "R4": { R4 = (System.Boolean)value; break; };
-                case "R5": { R5 = (System.Boolean)value; break; };
-                case "R6": { R6 = (System.Boolean)value; break; };
+                case "A": { A = (float)value; break; };
+                case "B": { B = (float)value; break; };
+                case "R1": { R1 = (bool)value; break; };
+                case "R2": { R2 = (bool)value; break; };
+                case "R3": { R3 = (bool)value; break; };
+                case "R4": { R4 = (bool)value; break; };
+                case "R5": { R5 = (bool)value; break; };
+                case "R6": { R6 = (bool)value; break; };
                 default: break;
             }
         }

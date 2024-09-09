@@ -5,9 +5,9 @@ namespace LiteGraphFrame
 {
     public partial class ValueNodeGetRandomInt : NodeRuntime
     {
-        public System.Int32 Min;
-        public System.Int32 Max;
-        public System.Int32 R;
+        public int Min;
+        public int Max;
+        public int R;
 
         public override object GetValue(string fieldName)
         {
@@ -23,9 +23,9 @@ namespace LiteGraphFrame
         {
             switch (fieldName)
             {
-                case "Min": { Min = (System.Int32)value; break; };
-                case "Max": { Max = (System.Int32)value; break; };
-                case "R": { R = (System.Int32)value; break; };
+                case "Min": { Min = (int)value; break; };
+                case "Max": { Max = (int)value; break; };
+                case "R": { R = (int)value; break; };
                 default: break;
             }
         }
